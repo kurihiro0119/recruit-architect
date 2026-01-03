@@ -5,6 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recruit Architect - 採用管理システム</title>
+    <script>
+      // 環境変数をランタイムで設定（ビルド時に置換される）
+      window.__ENV__ = {
+        VITE_API_URL: '%VITE_API_URL%'
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,4 +1,25 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8787";
+// ランタイムで環境変数を取得（HTMLに埋め込まれた値を使用）
+const getApiUrl = (): string => {
+  // 1. HTMLに埋め込まれた環境変数から取得（ランタイム）
+  if (typeof window !== "undefined" && (window as any).__ENV__?.VITE_API_URL) {
+    const url = (window as any).__ENV__.VITE_API_URL;
+    // プレースホルダーが残っている場合はビルド時の環境変数を使用
+    if (url && url !== "%VITE_API_URL%") {
+      return url;
+    }
+  }
+  // 2. ビルド時の環境変数から取得（フォールバック）
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // 3. デフォルト値
+  return "http://localhost:8787";
+};
+
+const API_URL = getApiUrl();
+
+// API_URLをエクスポート（他のコンポーネントから使用可能）
+export { getApiUrl };
 
 // Global token storage for user authentication
 let userAuthToken: string | null = null;

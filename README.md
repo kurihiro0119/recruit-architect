@@ -233,11 +233,38 @@ npx wrangler deploy --env production
 
 ### フロントエンドのデプロイ（Cloudflare Pages）
 
-1. フロントエンドをビルド:
+#### 方法 1: Cloudflare Pages 上でビルドする（推奨）
+
+Git 連携を設定すると、Cloudflare Pages 上で自動的にビルドされ、環境変数が正しく使われます。
+
+1. Cloudflare Pages プロジェクトを作成（初回のみ）:
+
+```bash
+# Cloudflare にログイン（初回のみ、または認証が必要な場合）
+npx wrangler login
+
+# プロジェクトを作成（初回のみ）
+npx wrangler pages project create recruit-architect-frontend
+```
+
+2. Git 連携を設定（Cloudflare Dashboard から）:
+
+   - リポジトリを接続
+   - ビルドコマンド: `cd apps/frontend && pnpm install && pnpm run build`
+   - ビルド出力ディレクトリ: `apps/frontend/dist`
+
+3. 環境変数を設定（Cloudflare Dashboard から）:
+   - `VITE_API_URL`: バックエンド API の URL（例: `https://recruit-architect-api.your-subdomain.workers.dev`）
+
+#### 方法 2: ローカルでビルドしてデプロイ
+
+ローカルでビルドする場合は、ビルド時に環境変数を設定する必要があります。
+
+1. 環境変数を設定してビルド:
 
 ```bash
 cd apps/frontend
-pnpm run build
+VITE_API_URL=https://your-api-url.workers.dev pnpm run build
 ```
 
 2. Cloudflare Pages プロジェクトを作成（初回のみ）:
@@ -257,14 +284,11 @@ npx wrangler pages project create recruit-architect-frontend
 npx wrangler pages deploy dist --project-name=recruit-architect-frontend
 ```
 
-4. 環境変数を設定（Cloudflare Dashboard から）:
-
-- `VITE_API_URL`: バックエンド API の URL（例: `https://recruit-architect-api.your-subdomain.workers.dev`）
-
 **注意**:
 
 - `wrangler.toml` は環境別設定に対応しているため、ローカル開発と本番環境の設定を同じファイルで管理できます。ローカル開発時は `database_id = "local"` が自動的に使用され、本番デプロイ時は `--env production` フラグで本番設定が使用されます。
-- フロントエンドの環境変数 `VITE_API_URL` は、ビルド時に埋め込まれるため、デプロイ前に設定するか、Cloudflare Pages の環境変数として設定する必要があります。
+- **方法 1（Cloudflare Pages 上でビルド）を推奨します**。これにより、Cloudflare Dashboard で設定した環境変数がビルド時に自動的に使われます。
+- 方法 2（ローカルでビルド）の場合、ビルド時に環境変数を設定しないと、デフォルト値（`http://localhost:8787`）が埋め込まれてしまいます。
 
 ## 管理者機能
 

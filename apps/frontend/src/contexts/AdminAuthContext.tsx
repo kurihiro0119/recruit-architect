@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { adminAuthApi } from '../lib/api';
+import { adminAuthApi, getApiUrl } from '../lib/api';
 
 interface Admin {
   id: string;
@@ -35,7 +35,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   const verifyToken = async (tokenToVerify: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8787'}/api/admin/verify`, {
+      const response = await fetch(`${getApiUrl()}/api/admin/verify`, {
         headers: {
           'Authorization': `Bearer ${tokenToVerify}`,
         },

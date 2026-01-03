@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { userAuthApi, setUserAuthToken } from '../lib/api';
+import { userAuthApi, setUserAuthToken, getApiUrl } from '../lib/api';
 
 interface User {
   id: string;
@@ -37,7 +37,7 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
 
   const verifyToken = async (tokenToVerify: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8787'}/api/user/verify`, {
+      const response = await fetch(`${getApiUrl()}/api/user/verify`, {
         headers: {
           'Authorization': `Bearer ${tokenToVerify}`,
         },
