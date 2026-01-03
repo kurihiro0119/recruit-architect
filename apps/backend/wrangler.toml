@@ -5,11 +5,19 @@ compatibility_date = "2024-05-01"
 [vars]
 ENVIRONMENT = "development"
 
-# D1 Database binding
-# For production, create a D1 database with: wrangler d1 create recruit-architect-db
-# Then update the database_id below
+# D1 Database binding (local development)
 [[d1_databases]]
 binding = "DB"
 database_name = "recruit-architect-db"
-database_id = "local" # Replace with actual database_id for production
+database_id = "local"
+migrations_dir = "migrations"
+
+# Production environment
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "recruit-architect-db"
+database_id = "5d9c97bb-abc5-4be1-935a-149bae02d18b"
 migrations_dir = "migrations"

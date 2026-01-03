@@ -674,7 +674,7 @@ function EditView({
       <Section title="D: 業界内のプレイヤーの特徴">
         <ArrayEditor
           items={formData.industryPlayerCharacteristics || []}
-          onChange={(items) => setFormData({ ...formData, industryPlayerCharacteristics: items })}
+          onChange={(items) => setFormData({ ...formData, industryPlayerCharacteristics: items as Array<{ id: string; characteristic: string }> })}
           labelKey="characteristic"
           placeholder="特徴を入力"
         />

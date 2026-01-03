@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { IdSchema, TimestampSchema, AuditSchema, CommentSchema } from './common';
+import { IdSchema, TimestampSchema, AuditSchema } from './common';
 
 // 部署スキーマ（正規化後）
 export const DepartmentSchema = z.object({
@@ -81,7 +81,6 @@ export const CreateOrganizationSchema = OrganizationSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-  comments: true,
 });
 
 export const UpdateOrganizationSchema = CreateOrganizationSchema.partial();

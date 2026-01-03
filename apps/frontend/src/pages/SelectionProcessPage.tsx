@@ -29,10 +29,6 @@ interface OrganizationMember {
   positionId?: string;
 }
 
-const processTypeOptions = [
-  { value: 'current', label: '現状' },
-  { value: 'ideal', label: '理想' },
-];
 
 const ownerTypeOptions = [
   { value: 'position', label: '役職' },
@@ -133,7 +129,6 @@ export function SelectionProcessPage() {
     try {
       const submitData = {
         ...formData,
-        owner: formData.ownerDisplayName || formData.owner, // 後方互換性のため
       };
       if (editingItem) {
         await selectionProcessApi.update(editingItem.id, submitData);
@@ -310,7 +305,6 @@ export function SelectionProcessPage() {
             onChange={(v) => setFormData({ ...formData, requiredDays: Number(v) })}
           />
           <FormField
-            label="備考・補足"
             label="備考"
             name="notes"
             type="textarea"

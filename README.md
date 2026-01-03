@@ -1,6 +1,6 @@
 # Recruit Architect - 採用管理システム
 
-採用活動を効率的に管理するためのフルスタックWebアプリケーションです。
+採用活動を効率的に管理するためのフルスタック Web アプリケーションです。
 
 ## ディレクトリ構造
 
@@ -80,30 +80,35 @@ recruit-architect/
 ## 技術選定
 
 ### モノレポ管理
+
 - **pnpm workspace**: パッケージ管理とワークスペース機能
 - **Turborepo**: ビルドキャッシュとタスク並列実行
 
 ### バックエンド
-- **Hono**: 軽量で高速なWebフレームワーク（Cloudflare Workers対応）
+
+- **Hono**: 軽量で高速な Web フレームワーク（Cloudflare Workers 対応）
 - **TypeScript**: 型安全な開発
-- **Cloudflare D1**: SQLite互換のサーバーレスデータベース
+- **Cloudflare D1**: SQLite 互換のサーバーレスデータベース
 
 ### フロントエンド
-- **React 18**: UIライブラリ
+
+- **React 18**: UI ライブラリ
 - **Vite**: 高速なビルドツール
 - **TypeScript**: 型安全な開発
-- **Tailwind CSS**: ユーティリティファーストCSSフレームワーク
+- **Tailwind CSS**: ユーティリティファースト CSS フレームワーク
 - **React Router v6**: クライアントサイドルーティング
 - **Lucide React**: アイコンライブラリ
 
 ### 共有パッケージ
-- **Zod**: スキーマ定義とバリデーション（OpenAPI互換）
+
+- **Zod**: スキーマ定義とバリデーション（OpenAPI 互換）
 
 ## 起動方法
 
 ### 前提条件
-- Node.js 18以上
-- pnpm 8以上
+
+- Node.js 18 以上
+- pnpm 8 以上
 
 ### インストール
 
@@ -133,9 +138,10 @@ pnpm run dev --filter=@recruit-architect/backend
 pnpm run dev --filter=@recruit-architect/frontend
 ```
 
-### アクセスURL
+### アクセス URL
+
 - フロントエンド: http://localhost:5173
-- バックエンドAPI: http://localhost:8787
+- バックエンド API: http://localhost:8787
 
 ### その他のコマンド
 
@@ -149,24 +155,24 @@ pnpm run build
 
 ## 機能一覧
 
-| 機能 | 説明 | APIエンドポイント |
-|------|------|------------------|
-| KPI管理 | 採用KPIの目標値・実績値を管理 | `/api/kpis` |
-| 採用施策管理 | 採用施策のスケジュール・進捗を管理 | `/api/initiatives` |
-| 企業・競合分析 | 企業情報と競合分析を管理 | `/api/company-analyses` |
-| 求人票管理 | 求人票の作成・編集・公開を管理 | `/api/job-postings` |
-| 業務・役割定義 | 職種・グレード別の業務定義を管理 | `/api/job-roles` |
-| 他社求人・ベンチマーク | 競合他社の求人情報を管理 | `/api/competitor-jobs` |
-| 組織・体制管理 | 部門・役割・人員構成を管理 | `/api/organizations` |
-| 選考プロセス管理 | 選考フローと各ステップを管理 | `/api/selection-processes` |
-| 採用チャネル管理 | 採用チャネルの特性・効果を管理 | `/api/recruitment-channels` |
-| FAQ管理 | よくある質問と回答を管理 | `/api/faqs` |
-| 履歴管理 | 全エンティティの変更履歴を参照 | `/api/history` |
-| 管理者機能 | 組織・ユーザー管理 | `/api/admins`, `/api/users` |
+| 機能                   | 説明                               | API エンドポイント          |
+| ---------------------- | ---------------------------------- | --------------------------- |
+| KPI 管理               | 採用 KPI の目標値・実績値を管理    | `/api/kpis`                 |
+| 採用施策管理           | 採用施策のスケジュール・進捗を管理 | `/api/initiatives`          |
+| 企業・競合分析         | 企業情報と競合分析を管理           | `/api/company-analyses`     |
+| 求人票管理             | 求人票の作成・編集・公開を管理     | `/api/job-postings`         |
+| 業務・役割定義         | 職種・グレード別の業務定義を管理   | `/api/job-roles`            |
+| 他社求人・ベンチマーク | 競合他社の求人情報を管理           | `/api/competitor-jobs`      |
+| 組織・体制管理         | 部門・役割・人員構成を管理         | `/api/organizations`        |
+| 選考プロセス管理       | 選考フローと各ステップを管理       | `/api/selection-processes`  |
+| 採用チャネル管理       | 採用チャネルの特性・効果を管理     | `/api/recruitment-channels` |
+| FAQ 管理               | よくある質問と回答を管理           | `/api/faqs`                 |
+| 履歴管理               | 全エンティティの変更履歴を参照     | `/api/history`              |
+| 管理者機能             | 組織・ユーザー管理                 | `/api/admins`, `/api/users` |
 
-## API仕様
+## API 仕様
 
-各エンティティは以下のCRUD操作をサポートしています:
+各エンティティは以下の CRUD 操作をサポートしています:
 
 - `GET /api/{entity}` - 一覧取得
 - `GET /api/{entity}/:id` - 個別取得
@@ -174,14 +180,15 @@ pnpm run build
 - `PUT /api/{entity}/:id` - 更新
 - `DELETE /api/{entity}/:id` - 削除
 
-履歴APIは以下のクエリパラメータをサポート:
+履歴 API は以下のクエリパラメータをサポート:
+
 - `GET /api/history?entityId={id}&entityType={type}` - フィルタリング
 
 ## データベース設定（Cloudflare D1）
 
 ### ローカル開発
 
-ローカル開発では、wranglerがD1をエミュレートします。特別な設定は不要です。
+ローカル開発では、wrangler が D1 をエミュレートします。特別な設定は不要です。
 
 ```bash
 # 開発サーバー起動時に自動的にローカルD1が使用されます
@@ -190,29 +197,72 @@ pnpm run dev --filter=@recruit-architect/backend
 
 ### 本番環境へのデプロイ
 
-1. D1データベースを作成:
+1. D1 データベースを作成:
+
 ```bash
 cd apps/backend
 npx wrangler d1 create recruit-architect-db
 ```
 
-2. 出力されたdatabase_idを`wrangler.toml`に設定:
+2. 出力された database_id を`wrangler.toml`の`[env.production]`セクションに設定:
+
 ```toml
-[[d1_databases]]
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.d1_databases]]
 binding = "DB"
 database_name = "recruit-architect-db"
-database_id = "your-database-id-here"
+database_id = "5d9c97bb-abc5-4be1-935a-149bae02d18b"
+migrations_dir = "migrations"
 ```
 
-3. マイグレーションを実行:
+3. マイグレーションを実行（本番環境）:
+
 ```bash
-npx wrangler d1 migrations apply recruit-architect-db
+npx wrangler d1 migrations apply recruit-architect-db --env production
 ```
 
-4. デプロイ:
+4. バックエンドをデプロイ:
+
 ```bash
-npx wrangler deploy
+npx wrangler deploy --env production
 ```
+
+### フロントエンドのデプロイ（Cloudflare Pages）
+
+1. フロントエンドをビルド:
+
+```bash
+cd apps/frontend
+pnpm run build
+```
+
+2. Cloudflare Pages プロジェクトを作成（初回のみ）:
+
+```bash
+# Cloudflare にログイン（初回のみ、または認証が必要な場合）
+npx wrangler login
+
+# プロジェクトを作成（初回のみ）
+npx wrangler pages project create recruit-architect-frontend
+```
+
+3. デプロイ:
+
+```bash
+# ビルド成果物をデプロイ
+npx wrangler pages deploy dist --project-name=recruit-architect-frontend
+```
+
+4. 環境変数を設定（Cloudflare Dashboard から）:
+
+- `VITE_API_URL`: バックエンド API の URL（例: `https://recruit-architect-api.your-subdomain.workers.dev`）
+
+**注意**:
+
+- `wrangler.toml` は環境別設定に対応しているため、ローカル開発と本番環境の設定を同じファイルで管理できます。ローカル開発時は `database_id = "local"` が自動的に使用され、本番デプロイ時は `--env production` フラグで本番設定が使用されます。
+- フロントエンドの環境変数 `VITE_API_URL` は、ビルド時に埋め込まれるため、デプロイ前に設定するか、Cloudflare Pages の環境変数として設定する必要があります。
 
 ## 管理者機能
 
@@ -225,7 +275,7 @@ npx wrangler deploy
 
 ### 管理者の登録
 
-管理者はCLIコマンドでのみ登録可能です:
+管理者は CLI コマンドでのみ登録可能です:
 
 ```bash
 # 管理者を作成するSQLを生成
@@ -236,7 +286,7 @@ pnpm run create-admin <email> <password> <name>
 pnpm run create-admin admin@example.com password123 "Admin User"
 ```
 
-生成されたSQLを実行:
+生成された SQL を実行:
 
 ```bash
 # ローカル環境
@@ -249,8 +299,8 @@ wrangler d1 execute recruit-architect-db --command "INSERT INTO admins ..."
 ## 注意事項
 
 - **認証なし**: 現在、認証機能は実装されていません。本番環境では適切な認証を追加してください。
-- **CORS設定**: 開発用にすべてのオリジンを許可しています。本番環境では適切に制限してください。
-- **パスワードハッシュ**: パスワードはSHA-256 + saltでハッシュ化されています。本番環境ではより安全な方法（bcrypt、argon2）の使用を推奨します。
+- **CORS 設定**: 開発用にすべてのオリジンを許可しています。本番環境では適切に制限してください。
+- **パスワードハッシュ**: パスワードは SHA-256 + salt でハッシュ化されています。本番環境ではより安全な方法（bcrypt、argon2）の使用を推奨します。
 
 ## ライセンス
 

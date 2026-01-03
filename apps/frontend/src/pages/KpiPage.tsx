@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { DataTable } from '../components/DataTable';
 import { Modal } from '../components/Modal';
 import { FormField } from '../components/FormField';
-import { kpiApi, kpiSnapshotApi } from '../lib/api';
+import { kpiApi } from '../lib/api';
 
 interface PhaseData {
   phaseName: string;
-  targetValue?: number;
-  actualValue?: number;
+  targetValue: number | undefined;
+  actualValue: number | undefined;
 }
 
 interface Kpi {
@@ -30,7 +30,13 @@ const defaultPhases = [
   '承諾',
 ];
 
-const initialFormData = {
+const initialFormData: {
+  periodStart: string;
+  periodEnd: string;
+  phase: string;
+  notes: string;
+  phaseData: PhaseData[];
+} = {
   periodStart: '',
   periodEnd: '',
   phase: '',
@@ -83,8 +89,8 @@ export function KpiPage() {
         const existing = phaseDataMap.get(phaseName);
         return {
           phaseName,
-          targetValue: existing?.targetValue,
-          actualValue: existing?.actualValue,
+          targetValue: existing?.targetValue as number | undefined,
+          actualValue: existing?.actualValue as number | undefined,
         };
       }),
     });
@@ -138,8 +144,8 @@ export function KpiPage() {
       result.push({
         phaseName: phase.phaseName,
         count: actualValue,
-        conversionRate: i > 0 && phases[i - 1].actualValue 
-          ? (actualValue / phases[i - 1].actualValue) * 100 
+        conversionRate: i > 0 && phases[i - 1]?.actualValue 
+          ? (actualValue / (phases[i - 1]?.actualValue ?? 1)) * 100 
           : undefined,
       });
     }
@@ -171,7 +177,7 @@ export function KpiPage() {
         
         return (
           <div className="flex gap-2 text-xs">
-            {displayPhases.map((p, idx) => (
+            {displayPhases.map((p) => (
               <div key={p.phaseName} className="flex flex-col items-center">
                 <span className="font-medium">{p.count}</span>
                 {p.conversionRate !== undefined && (

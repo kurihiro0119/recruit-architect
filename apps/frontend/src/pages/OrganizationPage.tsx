@@ -250,13 +250,14 @@ function DashboardView({
   // 部署とチームでグループ化
   const grouped = members.reduce((acc, member) => {
     const deptName = getDepartmentName(member.departmentId);
-    const teamName = getTeamName(member.teamId);
-    const key = `${member.departmentId}::${member.teamId || 'no-team'}`;
+    const teamId = member.teamId ?? null;
+    const teamName = getTeamName(teamId);
+    const key = `${member.departmentId}::${teamId || 'no-team'}`;
     if (!acc[key]) {
       acc[key] = {
         departmentId: member.departmentId,
         departmentName: deptName,
-        teamId: member.teamId,
+        teamId,
         teamName,
         members: [],
       };
@@ -320,13 +321,13 @@ function DashboardView({
                       {getDepartmentName(member.departmentId)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {getTeamName(member.teamId)}
+                      {getTeamName(member.teamId ?? null)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {member.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {getPositionName(member.positionId)}
+                      {getPositionName(member.positionId ?? null)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {member.employmentType || '-'}
@@ -376,7 +377,7 @@ function DashboardView({
                     <div key={member.id} className="flex items-center gap-4 text-sm">
                       <span className="font-medium text-gray-900 w-32">{member.name}</span>
                       <span className="text-gray-600 w-48">
-                        {getPositionName(member.positionId)}
+                        {getPositionName(member.positionId ?? null)}
                         {member.employmentType && ` / ${member.employmentType}`}
                       </span>
                       {member.notes && <span className="text-gray-500 text-xs">{member.notes}</span>}

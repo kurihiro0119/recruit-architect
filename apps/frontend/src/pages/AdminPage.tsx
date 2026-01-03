@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { organizationApi, getAdminApi, getUserApi } from '../lib/api';
+import { organizationApi, getUserApi } from '../lib/api';
 import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { Modal } from '../components/Modal';
-import { FormField } from '../components/FormField';
 import type { Organization, User, CreateOrganization, CreateUser, UpdateUser } from '@recruit-architect/openapi';
 
 export function AdminPage() {
@@ -377,7 +376,6 @@ export function AdminPage() {
       >
         <UserForm
           user={editingUser}
-          organizationId={selectedOrgId}
           onSave={handleSaveUser}
           onCancel={() => {
             setUserModalOpen(false);
@@ -461,12 +459,10 @@ function OrgForm({
 
 function UserForm({
   user,
-  organizationId,
   onSave,
   onCancel,
 }: {
   user: User | null;
-  organizationId: string | null;
   onSave: (data: Partial<CreateUser | UpdateUser>) => void;
   onCancel: () => void;
 }) {

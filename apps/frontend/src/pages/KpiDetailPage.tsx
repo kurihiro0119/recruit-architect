@@ -159,7 +159,7 @@ export function KpiDetailPage() {
     return { dates, milestones };
   };
 
-  const { dates, milestones } = generateTimelineData();
+  generateTimelineData();
   const keyPhases = ['エントリー', '書類通過', '一次面接', '最終面接', '内定', '承諾'];
 
   return (
