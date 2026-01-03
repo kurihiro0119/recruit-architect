@@ -48,19 +48,46 @@ async function fetchApi<T>(
   const normalizedEndpoint = endpoint.startsWith("/")
     ? endpoint
     : `/${endpoint}`;
-  const response = await fetch(`${API_URL}${normalizedEndpoint}`, {
-    ...options,
-    headers,
-  });
 
-  if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ error: "Unknown error" }));
-    throw new Error(error.error || `HTTP error! status: ${response.status}`);
+  const url = `${API_URL}${normalizedEndpoint}`;
+  console.log("Fetching:", url, { method: options?.method || "GET" });
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
+
+    console.log("Response status:", response.status, response.statusText);
+
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        // JSONパースに失敗した場合はテキストを取得
+        const text = await response.text();
+        errorData = { error: text || `HTTP error! status: ${response.status}` };
+      }
+      console.error("API error:", errorData);
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    // ネットワークエラー（CORS、タイムアウトなど）のハンドリング
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      console.error("Network error:", error);
+      throw new Error(
+        `ネットワークエラーが発生しました。APIサーバーに接続できません。URL: ${url}`
+      );
+    }
+    // その他のエラーはそのまま再スロー
+    throw error;
   }
-
-  return response.json();
 }
 
 export const api = {

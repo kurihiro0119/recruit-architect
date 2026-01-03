@@ -36,6 +36,8 @@ app.use(
       const frontendUrl = env.FRONTEND_URL;
       const environment = env.ENVIRONMENT || "development";
 
+      console.log("CORS check:", { origin, environment, frontendUrl });
+
       // 開発環境ではすべてのオリジンを許可
       if (environment === "development") {
         return "*";
@@ -46,13 +48,21 @@ app.use(
         // 複数のオリジンを許可する場合（カンマ区切り）
         const allowedOrigins = frontendUrl.split(",").map((url) => url.trim());
         if (origin && allowedOrigins.includes(origin)) {
+          console.log("CORS allowed:", origin);
           return origin;
         }
-        // リクエストにOriginヘッダーがない場合（サーバー間通信など）は最初のオリジンを返す
-        return allowedOrigins[0];
+        // リクエストにOriginヘッダーがない場合（OPTIONSリクエストなど）は最初のオリジンを返す
+        if (!origin) {
+          console.log("CORS: No origin header, allowing:", allowedOrigins[0]);
+          return allowedOrigins[0];
+        }
+        // マッチしない場合はnullを返してCORSエラーにする
+        console.log("CORS denied:", origin, "not in", allowedOrigins);
+        return null;
       }
 
       // 本番環境でFRONTEND_URLが設定されていない場合はすべて許可（フォールバック）
+      console.log("CORS: FRONTEND_URL not set, allowing all");
       return "*";
     },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
