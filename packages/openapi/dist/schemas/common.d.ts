@@ -11,14 +11,14 @@ export declare const TimestampSchema: z.ZodObject<{
     updatedAt: string;
 }>;
 export declare const AuditSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
 }>;
 export declare const CommentSchema: z.ZodObject<{
     id: z.ZodString;

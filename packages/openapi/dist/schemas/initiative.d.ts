@@ -33,8 +33,8 @@ export declare const InitiativeSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
@@ -44,8 +44,8 @@ export declare const InitiativeSchema: z.ZodObject<{
     mainOwner: string;
     outputAndGoal: string;
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -65,8 +65,8 @@ export declare const InitiativeSchema: z.ZodObject<{
     mainOwner: string;
     outputAndGoal: string;
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -111,16 +111,16 @@ export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     timingStart: string;
     milestone: string;
     mainOwner: string;
     outputAndGoal: string;
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     timingEnd?: string | undefined;
     schedule?: string | undefined;
@@ -130,16 +130,16 @@ export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     mainOwner: string;
     outputAndGoal: string;
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     timingEnd?: string | undefined;
     schedule?: string | undefined;
 }>;
 export declare const UpdateInitiativeSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodOptional<z.ZodEnum<["planned", "in_progress", "completed", "on_hold"]>>>;
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     timingStart: z.ZodOptional<z.ZodString>;
     timingEnd: z.ZodOptional<z.ZodOptional<z.ZodString>>;
@@ -149,8 +149,8 @@ export declare const UpdateInitiativeSchema: z.ZodObject<{
     outputAndGoal: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     timingStart?: string | undefined;
     timingEnd?: string | undefined;
@@ -160,8 +160,8 @@ export declare const UpdateInitiativeSchema: z.ZodObject<{
     outputAndGoal?: string | undefined;
 }, {
     status?: "planned" | "in_progress" | "completed" | "on_hold" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     timingStart?: string | undefined;
     timingEnd?: string | undefined;

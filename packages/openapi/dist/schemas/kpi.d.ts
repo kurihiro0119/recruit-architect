@@ -54,16 +54,16 @@ export declare const KpiSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
     periodStart: string;
     periodEnd: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phase?: string | undefined;
     notes?: string | undefined;
     phaseData?: {
@@ -84,8 +84,8 @@ export declare const KpiSchema: z.ZodObject<{
     id: string;
     periodStart: string;
     periodEnd: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phase?: string | undefined;
     notes?: string | undefined;
     phaseData?: {
@@ -143,13 +143,13 @@ export declare const CreateKpiSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     periodStart: string;
     periodEnd: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phase?: string | undefined;
     notes?: string | undefined;
     phaseData?: {
@@ -160,8 +160,8 @@ export declare const CreateKpiSchema: z.ZodObject<Omit<{
 }, {
     periodStart: string;
     periodEnd: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phase?: string | undefined;
     notes?: string | undefined;
     phaseData?: {
@@ -171,8 +171,8 @@ export declare const CreateKpiSchema: z.ZodObject<Omit<{
     }[] | undefined;
 }>;
 export declare const UpdateKpiSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     periodStart: z.ZodOptional<z.ZodString>;
     periodEnd: z.ZodOptional<z.ZodString>;
     phase: z.ZodOptional<z.ZodOptional<z.ZodString>>;
@@ -191,8 +191,8 @@ export declare const UpdateKpiSchema: z.ZodObject<{
         actualValue?: number | undefined;
     }>, "many">>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     periodStart?: string | undefined;
     periodEnd?: string | undefined;
     phase?: string | undefined;
@@ -203,8 +203,8 @@ export declare const UpdateKpiSchema: z.ZodObject<{
         actualValue?: number | undefined;
     }[] | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     periodStart?: string | undefined;
     periodEnd?: string | undefined;
     phase?: string | undefined;

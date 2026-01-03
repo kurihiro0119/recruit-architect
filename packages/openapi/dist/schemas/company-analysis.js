@@ -52,23 +52,83 @@ export const FutureMarketOutlookSchema = z.object({
     customerChanges: z.string().optional(),
     competitiveChanges: z.string().optional(),
 });
+export const CompetitorEvolutionSchema = z.object({
+    id: IdSchema,
+    category: z.enum(['established', 'newcomer']), // 古参/新参
+    companyName: z.string(),
+    characteristics: z.string().optional(),
+});
+export const MarketEvolutionSchema = z.object({
+    id: IdSchema,
+    period: z.string().optional(), // 時期
+    marketTrend: z.string().optional(), // 市場動向
+    featuresAndNeeds: z.string().optional(), // 特徴・ニーズ
+});
+export const TargetMarketSegmentSchema = z.object({
+    id: IdSchema,
+    segment: z.string(),
+    description: z.string().optional(),
+});
+export const FoundingMemberSchema = z.object({
+    id: IdSchema,
+    name: z.string(),
+    position: z.string().optional(),
+    role: z.string().optional(),
+});
+export const MainProductSchema = z.object({
+    id: IdSchema,
+    productName: z.string(),
+    description: z.string().optional(),
+    launchDate: z.string().optional(), // ISO 8601 date string
+});
+export const CompanyHistorySchema = z.object({
+    id: IdSchema,
+    year: z.string(),
+    event: z.string(),
+    description: z.string().optional(),
+});
+export const OrganizationStructureSchema = z.object({
+    id: IdSchema,
+    structure: z.string().optional(),
+    description: z.string().optional(),
+});
+export const HrEvaluationSystemSchema = z.object({
+    id: IdSchema,
+    system: z.string().optional(),
+    description: z.string().optional(),
+});
+export const CorporateCultureSchema = z.object({
+    id: IdSchema,
+    culture: z.string().optional(),
+    description: z.string().optional(),
+});
 export const CompanyAnalysisSchema = z.object({
     id: IdSchema,
     companyName: z.string(),
-    representative: z.string().optional(),
-    foundedDate: z.string().optional(), // ISO 8601 date string
-    employees: z.string().optional(),
-    address: z.string().optional(),
-    competitors: z.array(CompetitorSchema).optional(),
-    companyPosition: CompanyPositionSchema.optional(),
-    competitorStrategies: z.array(CompetitorStrategySchema).optional(),
-    industryPlayerCharacteristics: z.array(IndustryPlayerCharacteristicSchema).optional(),
-    externalInternalAnalysis: ExternalInternalAnalysisSchema.optional(),
-    marketResearch: MarketResearchSchema.optional(),
-    competitiveAdvantage: CompetitiveAdvantageSchema.optional(),
-    futureMarketOutlook: FutureMarketOutlookSchema.optional(),
-    notes: z.string().optional(),
-    comments: z.array(CommentSchema).optional(),
+    representative: z.string().nullish(),
+    foundedDate: z.string().nullish(), // ISO 8601 date string
+    employees: z.string().nullish(),
+    address: z.string().nullish(),
+    competitors: z.array(CompetitorSchema).nullish(),
+    companyPosition: CompanyPositionSchema.nullish(),
+    competitorStrategies: z.array(CompetitorStrategySchema).nullish(),
+    industryPlayerCharacteristics: z.array(IndustryPlayerCharacteristicSchema).nullish(),
+    externalInternalAnalysis: ExternalInternalAnalysisSchema.nullish(),
+    marketResearch: MarketResearchSchema.nullish(),
+    competitiveAdvantage: CompetitiveAdvantageSchema.nullish(),
+    futureMarketOutlook: FutureMarketOutlookSchema.nullish(),
+    competitorEvolutions: z.array(CompetitorEvolutionSchema).nullish(),
+    marketEvolutions: z.array(MarketEvolutionSchema).nullish(),
+    targetMarketSegments: z.array(TargetMarketSegmentSchema).nullish(),
+    foundingMembers: z.array(FoundingMemberSchema).nullish(),
+    mainProducts: z.array(MainProductSchema).nullish(),
+    companyHistories: z.array(CompanyHistorySchema).nullish(),
+    organizationStructure: OrganizationStructureSchema.nullish(),
+    hrEvaluationSystem: HrEvaluationSystemSchema.nullish(),
+    corporateCulture: CorporateCultureSchema.nullish(),
+    otherEpisodes: z.string().nullish(),
+    notes: z.string().nullish(),
+    comments: z.array(CommentSchema).nullish(),
 }).merge(TimestampSchema).merge(AuditSchema);
 export const CreateCompanyAnalysisSchema = CompanyAnalysisSchema.omit({
     id: true,

@@ -50,6 +50,16 @@ CREATE TABLE IF NOT EXISTS company_analyses (
   market_research TEXT, -- JSON object
   competitive_advantage TEXT, -- JSON object
   future_market_outlook TEXT, -- JSON object
+  competitor_evolutions TEXT, -- JSON array
+  market_evolutions TEXT, -- JSON array
+  target_market_segments TEXT, -- JSON array
+  founding_members TEXT, -- JSON array
+  main_products TEXT, -- JSON array
+  company_histories TEXT, -- JSON array
+  organization_structure TEXT, -- JSON object
+  hr_evaluation_system TEXT, -- JSON object
+  corporate_culture TEXT, -- JSON object
+  other_episodes TEXT,
   notes TEXT,
   comments TEXT, -- JSON array
   created_by TEXT,
@@ -61,7 +71,6 @@ CREATE TABLE IF NOT EXISTS company_analyses (
 -- Job postings table
 CREATE TABLE IF NOT EXISTS job_postings (
   id TEXT PRIMARY KEY,
-  job_id TEXT NOT NULL,
   position_name TEXT NOT NULL,
   recruitment_background TEXT,
   job_description TEXT,
@@ -117,9 +126,9 @@ CREATE TABLE IF NOT EXISTS competitor_jobs (
 -- Organizations table
 CREATE TABLE IF NOT EXISTS organizations (
   id TEXT PRIMARY KEY,
-  department TEXT NOT NULL,
-  role TEXT,
-  headcount INTEGER,
+  departments TEXT, -- JSON array
+  teams TEXT, -- JSON array
+  positions TEXT, -- JSON array
   members TEXT, -- JSON array
   notes TEXT,
   comments TEXT, -- JSON array

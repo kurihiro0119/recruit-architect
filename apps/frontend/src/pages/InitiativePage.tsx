@@ -44,7 +44,13 @@ export function InitiativePage() {
   const fetchData = async () => {
     try {
       const data = await initiativeApi.getAll() as Initiative[];
-      setInitiatives(data);
+      // 時系列順（timingStartの昇順）でソート
+      const sorted = [...data].sort((a, b) => {
+        const dateA = new Date(a.timingStart).getTime();
+        const dateB = new Date(b.timingStart).getTime();
+        return dateA - dateB;
+      });
+      setInitiatives(sorted);
     } catch (error) {
       console.error('Failed to fetch initiatives:', error);
     } finally {

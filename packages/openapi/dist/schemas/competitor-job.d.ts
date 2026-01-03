@@ -32,16 +32,16 @@ export declare const CompetitorJobSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
     companyName: string;
     position: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -61,8 +61,8 @@ export declare const CompetitorJobSchema: z.ZodObject<{
     id: string;
     companyName: string;
     position: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -110,13 +110,13 @@ export declare const CreateCompetitorJobSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     companyName: string;
     position: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     jobDescription?: string | undefined;
     salary?: string | undefined;
@@ -126,8 +126,8 @@ export declare const CreateCompetitorJobSchema: z.ZodObject<Omit<{
 }, {
     companyName: string;
     position: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     jobDescription?: string | undefined;
     salary?: string | undefined;
@@ -136,35 +136,35 @@ export declare const CreateCompetitorJobSchema: z.ZodObject<Omit<{
     requirements?: string | undefined;
 }>;
 export declare const UpdateCompetitorJobSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     companyName: z.ZodOptional<z.ZodString>;
+    position: z.ZodOptional<z.ZodString>;
     jobDescription: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     salary: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    position: z.ZodOptional<z.ZodString>;
     jobUrl: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     highlightPoints: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     requirements: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     companyName?: string | undefined;
+    position?: string | undefined;
     jobDescription?: string | undefined;
     salary?: string | undefined;
-    position?: string | undefined;
     jobUrl?: string | undefined;
     highlightPoints?: string | undefined;
     requirements?: string | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     companyName?: string | undefined;
+    position?: string | undefined;
     jobDescription?: string | undefined;
     salary?: string | undefined;
-    position?: string | undefined;
     jobUrl?: string | undefined;
     highlightPoints?: string | undefined;
     requirements?: string | undefined;

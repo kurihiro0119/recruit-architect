@@ -1,11 +1,15 @@
 import { z } from 'zod';
 export declare const ProcessTypeSchema: z.ZodEnum<["current", "ideal"]>;
+export declare const OwnerTypeSchema: z.ZodEnum<["position", "member", "text"]>;
 export declare const SelectionProcessSchema: z.ZodObject<{
     id: z.ZodString;
     stepNo: z.ZodNumber;
     phaseName: z.ZodString;
     detailedProcess: z.ZodOptional<z.ZodString>;
     owner: z.ZodOptional<z.ZodString>;
+    ownerType: z.ZodOptional<z.ZodEnum<["position", "member", "text"]>>;
+    ownerId: z.ZodOptional<z.ZodString>;
+    ownerDisplayName: z.ZodOptional<z.ZodString>;
     requiredDays: z.ZodOptional<z.ZodNumber>;
     processType: z.ZodEnum<["current", "ideal"]>;
     notes: z.ZodOptional<z.ZodString>;
@@ -32,8 +36,8 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
@@ -41,8 +45,8 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     phaseName: string;
     stepNo: number;
     processType: "current" | "ideal";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -53,6 +57,9 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     }[] | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
 }, {
     createdAt: string;
@@ -61,8 +68,8 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     phaseName: string;
     stepNo: number;
     processType: "current" | "ideal";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -73,6 +80,9 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     }[] | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
 }>;
 export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
@@ -81,6 +91,9 @@ export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
     phaseName: z.ZodString;
     detailedProcess: z.ZodOptional<z.ZodString>;
     owner: z.ZodOptional<z.ZodString>;
+    ownerType: z.ZodOptional<z.ZodEnum<["position", "member", "text"]>>;
+    ownerId: z.ZodOptional<z.ZodString>;
+    ownerDisplayName: z.ZodOptional<z.ZodString>;
     requiredDays: z.ZodOptional<z.ZodNumber>;
     processType: z.ZodEnum<["current", "ideal"]>;
     notes: z.ZodOptional<z.ZodString>;
@@ -107,61 +120,77 @@ export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     phaseName: string;
     stepNo: number;
     processType: "current" | "ideal";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
 }, {
     phaseName: string;
     stepNo: number;
     processType: "current" | "ideal";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
 }>;
 export declare const UpdateSelectionProcessSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     phaseName: z.ZodOptional<z.ZodString>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     stepNo: z.ZodOptional<z.ZodNumber>;
     detailedProcess: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     owner: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    ownerType: z.ZodOptional<z.ZodOptional<z.ZodEnum<["position", "member", "text"]>>>;
+    ownerId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    ownerDisplayName: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     requiredDays: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
     processType: z.ZodOptional<z.ZodEnum<["current", "ideal"]>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseName?: string | undefined;
     notes?: string | undefined;
     stepNo?: number | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
     processType?: "current" | "ideal" | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseName?: string | undefined;
     notes?: string | undefined;
     stepNo?: number | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
+    ownerType?: "position" | "member" | "text" | undefined;
+    ownerId?: string | undefined;
+    ownerDisplayName?: string | undefined;
     requiredDays?: number | undefined;
     processType?: "current" | "ideal" | undefined;
 }>;
 export type ProcessType = z.infer<typeof ProcessTypeSchema>;
+export type OwnerType = z.infer<typeof OwnerTypeSchema>;
 export type SelectionProcess = z.infer<typeof SelectionProcessSchema>;
 export type CreateSelectionProcess = z.infer<typeof CreateSelectionProcessSchema>;
 export type UpdateSelectionProcess = z.infer<typeof UpdateSelectionProcessSchema>;

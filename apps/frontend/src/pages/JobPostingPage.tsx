@@ -6,7 +6,6 @@ import { jobPostingApi } from '../lib/api';
 
 interface JobPosting {
   id: string;
-  jobId: string;
   positionName: string;
   recruitmentBackground?: string;
   jobDescription?: string;
@@ -27,7 +26,6 @@ const statusOptions = [
 ];
 
 const initialFormData = {
-  jobId: '',
   positionName: '',
   recruitmentBackground: '',
   jobDescription: '',
@@ -44,7 +42,9 @@ export function JobPostingPage() {
   const [items, setItems] = useState<JobPosting[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<JobPosting | null>(null);
+  const [detailItem, setDetailItem] = useState<JobPosting | null>(null);
   const [formData, setFormData] = useState(initialFormData);
 
   const fetchData = async () => {
@@ -71,7 +71,6 @@ export function JobPostingPage() {
   const handleEdit = (item: JobPosting) => {
     setEditingItem(item);
     setFormData({
-      jobId: item.jobId,
       positionName: item.positionName,
       recruitmentBackground: item.recruitmentBackground || '',
       jobDescription: item.jobDescription || '',
@@ -84,6 +83,11 @@ export function JobPostingPage() {
       notes: item.notes || '',
     });
     setModalOpen(true);
+  };
+
+  const handleDetail = (item: JobPosting) => {
+    setDetailItem(item);
+    setDetailModalOpen(true);
   };
 
   const handleDelete = async (item: JobPosting) => {
@@ -112,7 +116,6 @@ export function JobPostingPage() {
   };
 
   const columns = [
-    { key: 'jobId', label: '求人ID' },
     { key: 'positionName', label: 'ポジション名' },
     { key: 'workLocation', label: '勤務地' },
     { key: 'employmentType', label: '雇用形態' },
@@ -144,6 +147,7 @@ export function JobPostingPage() {
       <DataTable
         data={items}
         columns={columns}
+        onDetail={handleDetail}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onCreate={handleCreate}
@@ -157,13 +161,6 @@ export function JobPostingPage() {
         title={editingItem ? '求人票編集' : '求人票新規作成'}
       >
         <form onSubmit={handleSubmit}>
-          <FormField
-            label="求人ID"
-            name="jobId"
-            value={formData.jobId}
-            onChange={(v) => setFormData({ ...formData, jobId: String(v) })}
-            required
-          />
           <FormField
             label="ポジション名"
             name="positionName"
@@ -249,6 +246,108 @@ export function JobPostingPage() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* 詳細表示モーダル */}
+      <Modal
+        isOpen={detailModalOpen}
+        onClose={() => setDetailModalOpen(false)}
+        title="求人票詳細"
+      >
+        {detailItem && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">ポジション名</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900">{detailItem.positionName}</div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">募集背景</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900 whitespace-pre-wrap min-h-[60px]">
+                {detailItem.recruitmentBackground || '-'}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">業務内容</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900 whitespace-pre-wrap min-h-[60px]">
+                {detailItem.jobDescription || '-'}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">必須条件</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900 whitespace-pre-wrap min-h-[60px]">
+                {detailItem.requiredQualifications || '-'}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">歓迎条件</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900 whitespace-pre-wrap min-h-[60px]">
+                {detailItem.preferredQualifications || '-'}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">給与</label>
+                <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900">{detailItem.salary || '-'}</div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">勤務地</label>
+                <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900">{detailItem.workLocation || '-'}</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">雇用形態</label>
+                <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900">{detailItem.employmentType || '-'}</div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ステータス</label>
+                <div className="px-3 py-2">
+                  {(() => {
+                    const status = statusOptions.find((o) => o.value === detailItem.status);
+                    const colorClass =
+                      detailItem.status === 'published'
+                        ? 'bg-green-100 text-green-700'
+                        : detailItem.status === 'under_review'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : detailItem.status === 'closed'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-gray-100 text-gray-700';
+                    return (
+                      <span className={`px-2 py-1 text-xs rounded-full ${colorClass}`}>
+                        {status?.label || detailItem.status}
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">備考</label>
+              <div className="px-3 py-2 bg-gray-50 rounded-lg text-gray-900 whitespace-pre-wrap min-h-[60px]">
+                {detailItem.notes || '-'}
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setDetailModalOpen(false)}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                閉じる
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setDetailModalOpen(false);
+                  handleEdit(detailItem);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                編集
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

@@ -31,16 +31,16 @@ export declare const JobRoleSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
     jobType: string;
     grade: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -58,8 +58,8 @@ export declare const JobRoleSchema: z.ZodObject<{
     id: string;
     jobType: string;
     grade: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -103,13 +103,13 @@ export declare const CreateJobRoleSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     jobType: string;
     grade: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     mission?: string | undefined;
     specificTasks?: string | undefined;
@@ -117,16 +117,16 @@ export declare const CreateJobRoleSchema: z.ZodObject<Omit<{
 }, {
     jobType: string;
     grade: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     mission?: string | undefined;
     specificTasks?: string | undefined;
     targetType?: "internal" | "agt" | "both" | undefined;
 }>;
 export declare const UpdateJobRoleSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     jobType: z.ZodOptional<z.ZodString>;
     grade: z.ZodOptional<z.ZodString>;
@@ -134,8 +134,8 @@ export declare const UpdateJobRoleSchema: z.ZodObject<{
     specificTasks: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     targetType: z.ZodOptional<z.ZodOptional<z.ZodEnum<["internal", "agt", "both"]>>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     jobType?: string | undefined;
     grade?: string | undefined;
@@ -143,8 +143,8 @@ export declare const UpdateJobRoleSchema: z.ZodObject<{
     specificTasks?: string | undefined;
     targetType?: "internal" | "agt" | "both" | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     jobType?: string | undefined;
     grade?: string | undefined;

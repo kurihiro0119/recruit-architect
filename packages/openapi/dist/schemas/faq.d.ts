@@ -2,11 +2,12 @@ import { z } from 'zod';
 export declare const FaqVisibilitySchema: z.ZodEnum<["internal", "agt", "public"]>;
 export declare const FaqSchema: z.ZodObject<{
     id: z.ZodString;
-    category: z.ZodString;
+    categoryId: z.ZodString;
+    category: z.ZodOptional<z.ZodString>;
     question: z.ZodString;
-    answer: z.ZodString;
+    answer: z.ZodOptional<z.ZodString>;
     visibility: z.ZodEnum<["internal", "agt", "public"]>;
-    order: z.ZodOptional<z.ZodNumber>;
+    sortOrder: z.ZodOptional<z.ZodNumber>;
     notes: z.ZodOptional<z.ZodString>;
     comments: z.ZodOptional<z.ZodArray<z.ZodObject<{
         id: z.ZodString;
@@ -31,18 +32,17 @@ export declare const FaqSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
-    category: string;
+    categoryId: string;
     question: string;
-    answer: string;
     visibility: "internal" | "agt" | "public";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -51,17 +51,18 @@ export declare const FaqSchema: z.ZodObject<{
         authorId?: string | undefined;
         authorName?: string | undefined;
     }[] | undefined;
-    order?: number | undefined;
+    category?: string | undefined;
+    answer?: string | undefined;
+    sortOrder?: number | undefined;
 }, {
     createdAt: string;
     updatedAt: string;
     id: string;
-    category: string;
+    categoryId: string;
     question: string;
-    answer: string;
     visibility: "internal" | "agt" | "public";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -70,15 +71,18 @@ export declare const FaqSchema: z.ZodObject<{
         authorId?: string | undefined;
         authorName?: string | undefined;
     }[] | undefined;
-    order?: number | undefined;
+    category?: string | undefined;
+    answer?: string | undefined;
+    sortOrder?: number | undefined;
 }>;
 export declare const CreateFaqSchema: z.ZodObject<Omit<{
     id: z.ZodString;
-    category: z.ZodString;
+    categoryId: z.ZodString;
+    category: z.ZodOptional<z.ZodString>;
     question: z.ZodString;
-    answer: z.ZodString;
+    answer: z.ZodOptional<z.ZodString>;
     visibility: z.ZodEnum<["internal", "agt", "public"]>;
-    order: z.ZodOptional<z.ZodNumber>;
+    sortOrder: z.ZodOptional<z.ZodNumber>;
     notes: z.ZodOptional<z.ZodString>;
     comments: z.ZodOptional<z.ZodArray<z.ZodObject<{
         id: z.ZodString;
@@ -103,54 +107,59 @@ export declare const CreateFaqSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
-    category: string;
+    categoryId: string;
     question: string;
-    answer: string;
     visibility: "internal" | "agt" | "public";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    order?: number | undefined;
+    category?: string | undefined;
+    answer?: string | undefined;
+    sortOrder?: number | undefined;
 }, {
-    category: string;
+    categoryId: string;
     question: string;
-    answer: string;
     visibility: "internal" | "agt" | "public";
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    order?: number | undefined;
+    category?: string | undefined;
+    answer?: string | undefined;
+    sortOrder?: number | undefined;
 }>;
 export declare const UpdateFaqSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    category: z.ZodOptional<z.ZodString>;
+    category: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    categoryId: z.ZodOptional<z.ZodString>;
     question: z.ZodOptional<z.ZodString>;
-    answer: z.ZodOptional<z.ZodString>;
+    answer: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     visibility: z.ZodOptional<z.ZodEnum<["internal", "agt", "public"]>>;
-    order: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
+    sortOrder: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     category?: string | undefined;
+    categoryId?: string | undefined;
     question?: string | undefined;
     answer?: string | undefined;
     visibility?: "internal" | "agt" | "public" | undefined;
-    order?: number | undefined;
+    sortOrder?: number | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     category?: string | undefined;
+    categoryId?: string | undefined;
     question?: string | undefined;
     answer?: string | undefined;
     visibility?: "internal" | "agt" | "public" | undefined;
-    order?: number | undefined;
+    sortOrder?: number | undefined;
 }>;
 export type FaqVisibility = z.infer<typeof FaqVisibilitySchema>;
 export type Faq = z.infer<typeof FaqSchema>;

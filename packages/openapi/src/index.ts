@@ -9,4 +9,5 @@ export * from './schemas/organization';
 export * from './schemas/selection-process';
 export * from './schemas/recruitment-channel';
 export * from './schemas/faq';
+export * from './schemas/faq-category';
 export * from './schemas/common';

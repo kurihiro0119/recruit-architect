@@ -11,7 +11,6 @@ export const JobRevisionSchema = z.object({
 });
 export const JobPostingSchema = z.object({
     id: IdSchema,
-    jobId: z.string(),
     positionName: z.string(),
     recruitmentBackground: z.string().optional(),
     jobDescription: z.string().optional(),

@@ -1,15 +1,21 @@
 import type { D1Database } from '@cloudflare/workers-types';
 import type {
   Kpi,
+  KpiSnapshot,
   Initiative,
   CompanyAnalysis,
   JobPosting,
   JobRole,
   CompetitorJob,
   Organization,
+  Department,
+  Team,
+  Position,
+  OrganizationMember,
   SelectionProcess,
   RecruitmentChannel,
   Faq,
+  FaqCategory,
   HistoryEntry,
 } from '@recruit-architect/openapi';
 
@@ -28,12 +34,15 @@ function toDbRecord(obj: Record<string, unknown>): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
     const snakeKey = toSnakeCase(key);
-    if (value !== undefined && value !== null) {
-      if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
-        result[snakeKey] = JSON.stringify(value);
-      } else {
-        result[snakeKey] = value;
-      }
+    // undefinedの値は除外（部分更新時に既存フィールドを保持するため）
+    if (value === undefined) {
+      continue;
+    }
+    // nullや空配列も含めて保存
+    if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+      result[snakeKey] = JSON.stringify(value);
+    } else {
+      result[snakeKey] = value;
     }
   }
   return result;
@@ -59,7 +68,7 @@ function fromDbRecord<T>(record: Record<string, unknown>, jsonFields: string[] =
 
 // Table configurations with JSON fields
 const tableConfigs: Record<string, { tableName: string; jsonFields: string[] }> = {
-  kpi: { tableName: 'kpis', jsonFields: ['comments', 'phaseData'] },
+  kpi: { tableName: 'kpis', jsonFields: ['phaseData', 'comments'] },
   kpiSnapshot: { tableName: 'kpi_snapshots', jsonFields: ['phaseData'] },
   initiative: { tableName: 'initiatives', jsonFields: ['comments'] },
   companyAnalysis: {
@@ -79,10 +88,15 @@ const tableConfigs: Record<string, { tableName: string; jsonFields: string[] }> 
   jobPosting: { tableName: 'job_postings', jsonFields: ['revisions', 'comments'] },
   jobRole: { tableName: 'job_roles', jsonFields: ['comments'] },
   competitorJob: { tableName: 'competitor_jobs', jsonFields: ['comments'] },
-  organization: { tableName: 'organizations', jsonFields: ['members', 'comments'] },
+  organization: { tableName: 'organizations', jsonFields: ['comments'] },
+  department: { tableName: 'departments', jsonFields: [] },
+  team: { tableName: 'teams', jsonFields: [] },
+  position: { tableName: 'positions', jsonFields: [] },
+  organizationMember: { tableName: 'organization_members', jsonFields: [] },
   selectionProcess: { tableName: 'selection_processes', jsonFields: ['comments'] },
   recruitmentChannel: { tableName: 'recruitment_channels', jsonFields: ['targetJobTypes', 'comments'] },
   faq: { tableName: 'faqs', jsonFields: ['comments'] },
+  faqCategory: { tableName: 'faq_categories', jsonFields: [] },
 };
 
 export function createD1Service<T extends { id: string }>(
@@ -168,6 +182,12 @@ export function createD1Service<T extends { id: string }>(
         action: 'update',
         changes: data as Record<string, unknown>,
       });
+
+      // 更新後のデータをDBから再取得して返す（JSONフィールドが正しくパースされるように）
+      const updatedRecord = await this.getById(id);
+      if (updatedRecord) {
+        return updatedRecord;
+      }
 
       return updated as T;
     },

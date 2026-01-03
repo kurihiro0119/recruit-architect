@@ -24,7 +24,6 @@ export declare const JobRevisionSchema: z.ZodObject<{
 }>;
 export declare const JobPostingSchema: z.ZodObject<{
     id: z.ZodString;
-    jobId: z.ZodString;
     positionName: z.ZodString;
     recruitmentBackground: z.ZodOptional<z.ZodString>;
     jobDescription: z.ZodOptional<z.ZodString>;
@@ -80,17 +79,16 @@ export declare const JobPostingSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     status: "draft" | "under_review" | "published" | "closed";
     id: string;
-    jobId: string;
     positionName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -119,10 +117,9 @@ export declare const JobPostingSchema: z.ZodObject<{
     updatedAt: string;
     status: "draft" | "under_review" | "published" | "closed";
     id: string;
-    jobId: string;
     positionName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -149,7 +146,6 @@ export declare const JobPostingSchema: z.ZodObject<{
 }>;
 export declare const CreateJobPostingSchema: z.ZodObject<Omit<{
     id: z.ZodString;
-    jobId: z.ZodString;
     positionName: z.ZodString;
     recruitmentBackground: z.ZodOptional<z.ZodString>;
     jobDescription: z.ZodOptional<z.ZodString>;
@@ -205,14 +201,13 @@ export declare const CreateJobPostingSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments" | "revisions">, "strip", z.ZodTypeAny, {
     status: "draft" | "under_review" | "published" | "closed";
-    jobId: string;
     positionName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     recruitmentBackground?: string | undefined;
     jobDescription?: string | undefined;
@@ -223,10 +218,9 @@ export declare const CreateJobPostingSchema: z.ZodObject<Omit<{
     employmentType?: string | undefined;
 }, {
     status: "draft" | "under_review" | "published" | "closed";
-    jobId: string;
     positionName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     recruitmentBackground?: string | undefined;
     jobDescription?: string | undefined;
@@ -238,10 +232,9 @@ export declare const CreateJobPostingSchema: z.ZodObject<Omit<{
 }>;
 export declare const UpdateJobPostingSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<["draft", "under_review", "published", "closed"]>>;
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    jobId: z.ZodOptional<z.ZodString>;
     positionName: z.ZodOptional<z.ZodString>;
     recruitmentBackground: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     jobDescription: z.ZodOptional<z.ZodOptional<z.ZodString>>;
@@ -252,10 +245,9 @@ export declare const UpdateJobPostingSchema: z.ZodObject<{
     employmentType: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     status?: "draft" | "under_review" | "published" | "closed" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    jobId?: string | undefined;
     positionName?: string | undefined;
     recruitmentBackground?: string | undefined;
     jobDescription?: string | undefined;
@@ -266,10 +258,9 @@ export declare const UpdateJobPostingSchema: z.ZodObject<{
     employmentType?: string | undefined;
 }, {
     status?: "draft" | "under_review" | "published" | "closed" | undefined;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    jobId?: string | undefined;
     positionName?: string | undefined;
     recruitmentBackground?: string | undefined;
     jobDescription?: string | undefined;

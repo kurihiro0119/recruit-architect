@@ -86,9 +86,41 @@ export const competitorJobApi = {
 export const organizationApi = {
   getAll: () => api.get('/api/organizations'),
   getById: (id: string) => api.get(`/api/organizations/${id}`),
-  create: (data: unknown) => api.post('/api/organizations', data),
+  // create: (data: unknown) => api.post('/api/organizations', data), // 将来的にSaaS対応で必要
   update: (id: string, data: unknown) => api.put(`/api/organizations/${id}`, data),
   delete: (id: string) => api.delete(`/api/organizations/${id}`),
+};
+
+export const departmentApi = {
+  getAll: () => api.get('/api/departments'),
+  getById: (id: string) => api.get(`/api/departments/${id}`),
+  create: (data: unknown) => api.post('/api/departments', data),
+  update: (id: string, data: unknown) => api.put(`/api/departments/${id}`, data),
+  delete: (id: string) => api.delete(`/api/departments/${id}`),
+};
+
+export const teamApi = {
+  getAll: () => api.get('/api/teams'),
+  getById: (id: string) => api.get(`/api/teams/${id}`),
+  create: (data: unknown) => api.post('/api/teams', data),
+  update: (id: string, data: unknown) => api.put(`/api/teams/${id}`, data),
+  delete: (id: string) => api.delete(`/api/teams/${id}`),
+};
+
+export const positionApi = {
+  getAll: () => api.get('/api/positions'),
+  getById: (id: string) => api.get(`/api/positions/${id}`),
+  create: (data: unknown) => api.post('/api/positions', data),
+  update: (id: string, data: unknown) => api.put(`/api/positions/${id}`, data),
+  delete: (id: string) => api.delete(`/api/positions/${id}`),
+};
+
+export const organizationMemberApi = {
+  getAll: () => api.get('/api/organization-members'),
+  getById: (id: string) => api.get(`/api/organization-members/${id}`),
+  create: (data: unknown) => api.post('/api/organization-members', data),
+  update: (id: string, data: unknown) => api.put(`/api/organization-members/${id}`, data),
+  delete: (id: string) => api.delete(`/api/organization-members/${id}`),
 };
 
 export const selectionProcessApi = {
@@ -113,6 +145,14 @@ export const faqApi = {
   create: (data: unknown) => api.post('/api/faqs', data),
   update: (id: string, data: unknown) => api.put(`/api/faqs/${id}`, data),
   delete: (id: string) => api.delete(`/api/faqs/${id}`),
+};
+
+export const faqCategoryApi = {
+  getAll: () => api.get('/api/faq-categories'),
+  getById: (id: string) => api.get(`/api/faq-categories/${id}`),
+  create: (data: unknown) => api.post('/api/faq-categories', data),
+  update: (id: string, data: unknown) => api.put(`/api/faq-categories/${id}`, data),
+  delete: (id: string) => api.delete(`/api/faq-categories/${id}`),
 };
 
 export const historyApi = {

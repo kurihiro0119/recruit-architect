@@ -11,10 +11,14 @@ interface DashboardStats {
 
 interface Kpi {
   id: string;
-  period: string;
-  kpiType: string;
-  targetValue: number;
-  actualValue?: number;
+  periodStart: string;
+  periodEnd: string;
+  phase?: string;
+  phaseData?: Array<{
+    phaseName: string;
+    targetValue?: number;
+    actualValue?: number;
+  }>;
 }
 
 interface Initiative {
@@ -113,19 +117,53 @@ export function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {recentKpis.map((kpi) => {
-                  const diff = kpi.actualValue !== undefined ? kpi.actualValue - kpi.targetValue : 0;
+                  const startDate = new Date(kpi.periodStart).toLocaleDateString('ja-JP');
+                  const endDate = new Date(kpi.periodEnd).toLocaleDateString('ja-JP');
+                  const period = `${startDate} ～ ${endDate}`;
+                  
+                  // 主要なフェーズのデータを取得（エントリー、書類通過、一次面接、最終面接、内定、承諾）
+                  const keyPhases = ['エントリー', '書類通過', '一次面接', '最終面接', '内定', '承諾'];
+                  
+                  // phaseDataが配列かどうかを確認
+                  const phaseDataArray = Array.isArray(kpi.phaseData) 
+                    ? kpi.phaseData 
+                    : (typeof kpi.phaseData === 'string' ? JSON.parse(kpi.phaseData) : []);
+                  
+                  const phaseData = phaseDataArray.filter((p: any) => keyPhases.includes(p.phaseName)) || [];
+                  
+                  // 最初のフェーズのデータを表示（または合計値）
+                  const displayPhase = phaseData[0] || (phaseDataArray.length > 0 ? phaseDataArray[0] : null);
+                  
+                  if (!displayPhase) {
+                    return (
+                      <div key={kpi.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium text-gray-800">{period}</p>
+                          <p className="text-sm text-gray-500">{kpi.phase || 'KPI'}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium text-gray-800">-</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  const targetValue = displayPhase.targetValue || 0;
+                  const actualValue = displayPhase.actualValue;
+                  const diff = actualValue !== undefined ? actualValue - targetValue : 0;
                   const isPositive = diff >= 0;
+                  
                   return (
                     <div key={kpi.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-800">{kpi.period}</p>
-                        <p className="text-sm text-gray-500">{kpi.kpiType}</p>
+                        <p className="font-medium text-gray-800">{period}</p>
+                        <p className="text-sm text-gray-500">{displayPhase.phaseName}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium text-gray-800">
-                          {kpi.actualValue ?? '-'} / {kpi.targetValue}
+                          {actualValue ?? '-'} / {targetValue}
                         </p>
-                        {kpi.actualValue !== undefined && (
+                        {actualValue !== undefined && (
                           <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
                             {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                             <span>{isPositive ? '+' : ''}{diff}</span>

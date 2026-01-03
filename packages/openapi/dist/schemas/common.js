@@ -5,8 +5,8 @@ export const TimestampSchema = z.object({
     updatedAt: z.string().datetime(),
 });
 export const AuditSchema = z.object({
-    createdBy: z.string().optional(),
-    updatedBy: z.string().optional(),
+    createdBy: z.string().nullish(),
+    updatedBy: z.string().nullish(),
 });
 export const CommentSchema = z.object({
     id: IdSchema,

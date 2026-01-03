@@ -10,9 +10,14 @@ import { registerJobPostingRoutes } from "./routes/job-posting.routes";
 import { registerJobRoleRoutes } from "./routes/job-role.routes";
 import { registerCompetitorJobRoutes } from "./routes/competitor-job.routes";
 import { registerOrganizationRoutes } from "./routes/organization.routes";
+import { registerDepartmentRoutes } from "./routes/department.routes";
+import { registerTeamRoutes } from "./routes/team.routes";
+import { registerPositionRoutes } from "./routes/position.routes";
+import { registerOrganizationMemberRoutes } from "./routes/organization-member.routes";
 import { registerSelectionProcessRoutes } from "./routes/selection-process.routes";
 import { registerRecruitmentChannelRoutes } from "./routes/recruitment-channel.routes";
 import { registerFaqRoutes } from "./routes/faq.routes";
+import { registerFaqCategoryRoutes } from "./routes/faq-category.routes";
 import { registerHistoryRoutes } from "./routes/history.routes";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -43,9 +48,14 @@ app.get("/", (c) => {
       "/api/job-roles",
       "/api/competitor-jobs",
       "/api/organizations",
+      "/api/departments",
+      "/api/teams",
+      "/api/positions",
+      "/api/organization-members",
       "/api/selection-processes",
       "/api/recruitment-channels",
       "/api/faqs",
+      "/api/faq-categories",
       "/api/history",
     ],
   });
@@ -60,9 +70,14 @@ registerJobPostingRoutes(app);
 registerJobRoleRoutes(app);
 registerCompetitorJobRoutes(app);
 registerOrganizationRoutes(app);
+registerDepartmentRoutes(app);
+registerTeamRoutes(app);
+registerPositionRoutes(app);
+registerOrganizationMemberRoutes(app);
 registerSelectionProcessRoutes(app);
 registerRecruitmentChannelRoutes(app);
 registerFaqRoutes(app);
+registerFaqCategoryRoutes(app);
 registerHistoryRoutes(app);
 
 export default app;

@@ -30,15 +30,15 @@ export declare const RecruitmentChannelSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
     channelName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -56,8 +56,8 @@ export declare const RecruitmentChannelSchema: z.ZodObject<{
     updatedAt: string;
     id: string;
     channelName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -102,12 +102,12 @@ export declare const CreateRecruitmentChannelSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
     channelName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     characteristics?: string | undefined;
     targetJobTypes?: string[] | undefined;
@@ -115,8 +115,8 @@ export declare const CreateRecruitmentChannelSchema: z.ZodObject<Omit<{
     effectiveness?: string | undefined;
 }, {
     channelName: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
     characteristics?: string | undefined;
     targetJobTypes?: string[] | undefined;
@@ -124,29 +124,29 @@ export declare const CreateRecruitmentChannelSchema: z.ZodObject<Omit<{
     effectiveness?: string | undefined;
 }>;
 export declare const UpdateRecruitmentChannelSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    channelName: z.ZodOptional<z.ZodString>;
     characteristics: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    channelName: z.ZodOptional<z.ZodString>;
     targetJobTypes: z.ZodOptional<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     cost: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     effectiveness: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    channelName?: string | undefined;
     characteristics?: string | undefined;
+    channelName?: string | undefined;
     targetJobTypes?: string[] | undefined;
     cost?: string | undefined;
     effectiveness?: string | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     notes?: string | undefined;
-    channelName?: string | undefined;
     characteristics?: string | undefined;
+    channelName?: string | undefined;
     targetJobTypes?: string[] | undefined;
     cost?: string | undefined;
     effectiveness?: string | undefined;

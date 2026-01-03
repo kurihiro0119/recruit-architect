@@ -21,16 +21,16 @@ export declare const KpiSnapshotSchema: z.ZodObject<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     createdAt: string;
     updatedAt: string;
     id: string;
     kpiId: string;
     snapshotDate: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;
@@ -43,8 +43,8 @@ export declare const KpiSnapshotSchema: z.ZodObject<{
     id: string;
     kpiId: string;
     snapshotDate: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;
@@ -74,13 +74,13 @@ export declare const CreateKpiSnapshotSchema: z.ZodObject<Omit<{
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
 } & {
-    createdBy: z.ZodOptional<z.ZodString>;
-    updatedBy: z.ZodOptional<z.ZodString>;
+    createdBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    updatedBy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "createdAt" | "updatedAt" | "id">, "strip", z.ZodTypeAny, {
     kpiId: string;
     snapshotDate: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;
@@ -90,8 +90,8 @@ export declare const CreateKpiSnapshotSchema: z.ZodObject<Omit<{
 }, {
     kpiId: string;
     snapshotDate: string;
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;
@@ -100,8 +100,8 @@ export declare const CreateKpiSnapshotSchema: z.ZodObject<Omit<{
     comments?: string | undefined;
 }>;
 export declare const UpdateKpiSnapshotSchema: z.ZodObject<{
-    createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    createdBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    updatedBy: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
     phaseData: z.ZodOptional<z.ZodOptional<z.ZodArray<z.ZodObject<{
         phaseName: z.ZodString;
         targetValue: z.ZodOptional<z.ZodNumber>;
@@ -119,8 +119,8 @@ export declare const UpdateKpiSnapshotSchema: z.ZodObject<{
     kpiId: z.ZodOptional<z.ZodString>;
     snapshotDate: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;
@@ -130,8 +130,8 @@ export declare const UpdateKpiSnapshotSchema: z.ZodObject<{
     kpiId?: string | undefined;
     snapshotDate?: string | undefined;
 }, {
-    createdBy?: string | undefined;
-    updatedBy?: string | undefined;
+    createdBy?: string | null | undefined;
+    updatedBy?: string | null | undefined;
     phaseData?: {
         phaseName: string;
         targetValue?: number | undefined;

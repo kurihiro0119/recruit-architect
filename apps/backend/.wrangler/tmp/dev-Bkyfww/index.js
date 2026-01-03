@@ -5,7 +5,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// .wrangler/tmp/bundle-MkMlDd/checked-fetch.js
+// .wrangler/tmp/bundle-MhQREt/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -31,7 +31,7 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
   }
 });
 
-// .wrangler/tmp/bundle-MkMlDd/strip-cf-connecting-ip-header.js
+// .wrangler/tmp/bundle-MhQREt/strip-cf-connecting-ip-header.js
 function stripCfConnectingIPHeader(input, init) {
   const request = new Request(input, init);
   request.headers.delete("CF-Connecting-IP");
@@ -6348,8 +6348,8 @@ var TimestampSchema = external_exports.object({
   updatedAt: external_exports.string().datetime()
 });
 var AuditSchema = external_exports.object({
-  createdBy: external_exports.string().optional(),
-  updatedBy: external_exports.string().optional()
+  createdBy: external_exports.string().nullish(),
+  updatedBy: external_exports.string().nullish()
 });
 var CommentSchema = external_exports.object({
   id: IdSchema,
@@ -6490,24 +6490,89 @@ var FutureMarketOutlookSchema = external_exports.object({
   customerChanges: external_exports.string().optional(),
   competitiveChanges: external_exports.string().optional()
 });
+var CompetitorEvolutionSchema = external_exports.object({
+  id: IdSchema,
+  category: external_exports.enum(["established", "newcomer"]),
+  // 古参/新参
+  companyName: external_exports.string(),
+  characteristics: external_exports.string().optional()
+});
+var MarketEvolutionSchema = external_exports.object({
+  id: IdSchema,
+  period: external_exports.string().optional(),
+  // 時期
+  marketTrend: external_exports.string().optional(),
+  // 市場動向
+  featuresAndNeeds: external_exports.string().optional()
+  // 特徴・ニーズ
+});
+var TargetMarketSegmentSchema = external_exports.object({
+  id: IdSchema,
+  segment: external_exports.string(),
+  description: external_exports.string().optional()
+});
+var FoundingMemberSchema = external_exports.object({
+  id: IdSchema,
+  name: external_exports.string(),
+  position: external_exports.string().optional(),
+  role: external_exports.string().optional()
+});
+var MainProductSchema = external_exports.object({
+  id: IdSchema,
+  productName: external_exports.string(),
+  description: external_exports.string().optional(),
+  launchDate: external_exports.string().optional()
+  // ISO 8601 date string
+});
+var CompanyHistorySchema = external_exports.object({
+  id: IdSchema,
+  year: external_exports.string(),
+  event: external_exports.string(),
+  description: external_exports.string().optional()
+});
+var OrganizationStructureSchema = external_exports.object({
+  id: IdSchema,
+  structure: external_exports.string().optional(),
+  description: external_exports.string().optional()
+});
+var HrEvaluationSystemSchema = external_exports.object({
+  id: IdSchema,
+  system: external_exports.string().optional(),
+  description: external_exports.string().optional()
+});
+var CorporateCultureSchema = external_exports.object({
+  id: IdSchema,
+  culture: external_exports.string().optional(),
+  description: external_exports.string().optional()
+});
 var CompanyAnalysisSchema = external_exports.object({
   id: IdSchema,
   companyName: external_exports.string(),
-  representative: external_exports.string().optional(),
-  foundedDate: external_exports.string().optional(),
+  representative: external_exports.string().nullish(),
+  foundedDate: external_exports.string().nullish(),
   // ISO 8601 date string
-  employees: external_exports.string().optional(),
-  address: external_exports.string().optional(),
-  competitors: external_exports.array(CompetitorSchema).optional(),
-  companyPosition: CompanyPositionSchema.optional(),
-  competitorStrategies: external_exports.array(CompetitorStrategySchema).optional(),
-  industryPlayerCharacteristics: external_exports.array(IndustryPlayerCharacteristicSchema).optional(),
-  externalInternalAnalysis: ExternalInternalAnalysisSchema.optional(),
-  marketResearch: MarketResearchSchema.optional(),
-  competitiveAdvantage: CompetitiveAdvantageSchema.optional(),
-  futureMarketOutlook: FutureMarketOutlookSchema.optional(),
-  notes: external_exports.string().optional(),
-  comments: external_exports.array(CommentSchema).optional()
+  employees: external_exports.string().nullish(),
+  address: external_exports.string().nullish(),
+  competitors: external_exports.array(CompetitorSchema).nullish(),
+  companyPosition: CompanyPositionSchema.nullish(),
+  competitorStrategies: external_exports.array(CompetitorStrategySchema).nullish(),
+  industryPlayerCharacteristics: external_exports.array(IndustryPlayerCharacteristicSchema).nullish(),
+  externalInternalAnalysis: ExternalInternalAnalysisSchema.nullish(),
+  marketResearch: MarketResearchSchema.nullish(),
+  competitiveAdvantage: CompetitiveAdvantageSchema.nullish(),
+  futureMarketOutlook: FutureMarketOutlookSchema.nullish(),
+  competitorEvolutions: external_exports.array(CompetitorEvolutionSchema).nullish(),
+  marketEvolutions: external_exports.array(MarketEvolutionSchema).nullish(),
+  targetMarketSegments: external_exports.array(TargetMarketSegmentSchema).nullish(),
+  foundingMembers: external_exports.array(FoundingMemberSchema).nullish(),
+  mainProducts: external_exports.array(MainProductSchema).nullish(),
+  companyHistories: external_exports.array(CompanyHistorySchema).nullish(),
+  organizationStructure: OrganizationStructureSchema.nullish(),
+  hrEvaluationSystem: HrEvaluationSystemSchema.nullish(),
+  corporateCulture: CorporateCultureSchema.nullish(),
+  otherEpisodes: external_exports.string().nullish(),
+  notes: external_exports.string().nullish(),
+  comments: external_exports.array(CommentSchema).nullish()
 }).merge(TimestampSchema).merge(AuditSchema);
 var CreateCompanyAnalysisSchema = CompanyAnalysisSchema.omit({
   id: true,
@@ -6529,7 +6594,6 @@ var JobRevisionSchema = external_exports.object({
 });
 var JobPostingSchema = external_exports.object({
   id: IdSchema,
-  jobId: external_exports.string(),
   positionName: external_exports.string(),
   recruitmentBackground: external_exports.string().optional(),
   jobDescription: external_exports.string().optional(),
@@ -6594,24 +6658,71 @@ var CreateCompetitorJobSchema = CompetitorJobSchema.omit({
 var UpdateCompetitorJobSchema = CreateCompetitorJobSchema.partial();
 
 // ../../packages/openapi/src/schemas/organization.ts
+var DepartmentSchema = external_exports.object({
+  id: IdSchema,
+  organizationId: external_exports.string(),
+  // 組織ID
+  name: external_exports.string(),
+  notes: external_exports.string().nullish()
+}).merge(TimestampSchema).merge(AuditSchema);
+var TeamSchema = external_exports.object({
+  id: IdSchema,
+  departmentId: external_exports.string(),
+  // 親部署のID
+  name: external_exports.string(),
+  notes: external_exports.string().nullish()
+}).merge(TimestampSchema).merge(AuditSchema);
+var PositionSchema = external_exports.object({
+  id: IdSchema,
+  organizationId: external_exports.string(),
+  // 組織ID
+  name: external_exports.string(),
+  notes: external_exports.string().nullish()
+}).merge(TimestampSchema).merge(AuditSchema);
 var OrganizationMemberSchema = external_exports.object({
   id: IdSchema,
-  department: external_exports.string(),
-  team: external_exports.string().optional(),
+  organizationId: external_exports.string(),
+  // 組織ID
+  departmentId: external_exports.string(),
+  // 部署ID
+  teamId: external_exports.string().nullish(),
+  // チームID（オプショナル）
+  positionId: external_exports.string().nullish(),
+  // 役職ID（オプショナル）
   name: external_exports.string(),
-  role: external_exports.string().optional(),
-  employmentType: external_exports.string().optional(),
-  notes: external_exports.string().optional()
-}).merge(TimestampSchema);
+  employmentType: external_exports.string().nullish(),
+  // 雇用形態（例: "正社員"）
+  notes: external_exports.string().nullish()
+}).merge(TimestampSchema).merge(AuditSchema);
 var OrganizationSchema = external_exports.object({
   id: IdSchema,
-  department: external_exports.string(),
-  role: external_exports.string().optional(),
-  headcount: external_exports.number().optional(),
-  members: external_exports.array(OrganizationMemberSchema).optional(),
-  notes: external_exports.string().optional(),
-  comments: external_exports.array(CommentSchema).optional()
+  notes: external_exports.string().nullish(),
+  comments: external_exports.array(CommentSchema).nullish()
 }).merge(TimestampSchema).merge(AuditSchema);
+var CreateDepartmentSchema = DepartmentSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+var UpdateDepartmentSchema = CreateDepartmentSchema.partial();
+var CreateTeamSchema = TeamSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+var UpdateTeamSchema = CreateTeamSchema.partial();
+var CreatePositionSchema = PositionSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+var UpdatePositionSchema = CreatePositionSchema.partial();
+var CreateOrganizationMemberSchema = OrganizationMemberSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+var UpdateOrganizationMemberSchema = CreateOrganizationMemberSchema.partial();
 var CreateOrganizationSchema = OrganizationSchema.omit({
   id: true,
   createdAt: true,
@@ -6622,12 +6733,20 @@ var UpdateOrganizationSchema = CreateOrganizationSchema.partial();
 
 // ../../packages/openapi/src/schemas/selection-process.ts
 var ProcessTypeSchema = external_exports.enum(["current", "ideal"]);
+var OwnerTypeSchema = external_exports.enum(["position", "member", "text"]);
 var SelectionProcessSchema = external_exports.object({
   id: IdSchema,
   stepNo: external_exports.number(),
   phaseName: external_exports.string(),
   detailedProcess: external_exports.string().optional(),
   owner: external_exports.string().optional(),
+  // 後方互換性のため残す
+  ownerType: OwnerTypeSchema.optional(),
+  // 'position' | 'member' | 'text'
+  ownerId: external_exports.string().optional(),
+  // position_id または organization_member_id
+  ownerDisplayName: external_exports.string().optional(),
+  // 表示用の名前
   requiredDays: external_exports.number().optional(),
   processType: ProcessTypeSchema,
   notes: external_exports.string().optional(),
@@ -6664,11 +6783,16 @@ var UpdateRecruitmentChannelSchema = CreateRecruitmentChannelSchema.partial();
 var FaqVisibilitySchema = external_exports.enum(["internal", "agt", "public"]);
 var FaqSchema = external_exports.object({
   id: IdSchema,
-  category: external_exports.string(),
+  categoryId: external_exports.string(),
+  // FAQカテゴリID
+  category: external_exports.string().optional(),
+  // 後方互換性のため残す（表示用）
   question: external_exports.string(),
-  answer: external_exports.string(),
+  answer: external_exports.string().optional(),
+  // 回答は任意
   visibility: FaqVisibilitySchema,
-  order: external_exports.number().optional(),
+  sortOrder: external_exports.number().optional(),
+  // データベースではsort_order
   notes: external_exports.string().optional(),
   comments: external_exports.array(CommentSchema).optional()
 }).merge(TimestampSchema).merge(AuditSchema);
@@ -6679,6 +6803,20 @@ var CreateFaqSchema = FaqSchema.omit({
   comments: true
 });
 var UpdateFaqSchema = CreateFaqSchema.partial();
+
+// ../../packages/openapi/src/schemas/faq-category.ts
+var FaqCategorySchema = external_exports.object({
+  id: IdSchema,
+  name: external_exports.string(),
+  sortOrder: external_exports.number().optional(),
+  notes: external_exports.string().optional()
+}).merge(TimestampSchema).merge(AuditSchema);
+var CreateFaqCategorySchema = FaqCategorySchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+var UpdateFaqCategorySchema = CreateFaqCategorySchema.partial();
 
 // src/adapters/d1-db.ts
 function toSnakeCase(str) {
@@ -6693,12 +6831,13 @@ function toDbRecord(obj) {
   const result = {};
   for (const [key, value] of Object.entries(obj)) {
     const snakeKey = toSnakeCase(key);
-    if (value !== void 0 && value !== null) {
-      if (Array.isArray(value) || typeof value === "object" && value !== null) {
-        result[snakeKey] = JSON.stringify(value);
-      } else {
-        result[snakeKey] = value;
-      }
+    if (value === void 0) {
+      continue;
+    }
+    if (Array.isArray(value) || typeof value === "object" && value !== null) {
+      result[snakeKey] = JSON.stringify(value);
+    } else {
+      result[snakeKey] = value;
     }
   }
   return result;
@@ -6722,7 +6861,7 @@ function fromDbRecord(record, jsonFields = []) {
 }
 __name(fromDbRecord, "fromDbRecord");
 var tableConfigs = {
-  kpi: { tableName: "kpis", jsonFields: ["comments", "phaseData"] },
+  kpi: { tableName: "kpis", jsonFields: ["phaseData", "comments"] },
   kpiSnapshot: { tableName: "kpi_snapshots", jsonFields: ["phaseData"] },
   initiative: { tableName: "initiatives", jsonFields: ["comments"] },
   companyAnalysis: {
@@ -6742,10 +6881,15 @@ var tableConfigs = {
   jobPosting: { tableName: "job_postings", jsonFields: ["revisions", "comments"] },
   jobRole: { tableName: "job_roles", jsonFields: ["comments"] },
   competitorJob: { tableName: "competitor_jobs", jsonFields: ["comments"] },
-  organization: { tableName: "organizations", jsonFields: ["members", "comments"] },
+  organization: { tableName: "organizations", jsonFields: ["comments"] },
+  department: { tableName: "departments", jsonFields: [] },
+  team: { tableName: "teams", jsonFields: [] },
+  position: { tableName: "positions", jsonFields: [] },
+  organizationMember: { tableName: "organization_members", jsonFields: [] },
   selectionProcess: { tableName: "selection_processes", jsonFields: ["comments"] },
   recruitmentChannel: { tableName: "recruitment_channels", jsonFields: ["targetJobTypes", "comments"] },
-  faq: { tableName: "faqs", jsonFields: ["comments"] }
+  faq: { tableName: "faqs", jsonFields: ["comments"] },
+  faqCategory: { tableName: "faq_categories", jsonFields: [] }
 };
 function createD1Service(db, entityType) {
   const config = tableConfigs[entityType];
@@ -6804,6 +6948,10 @@ function createD1Service(db, entityType) {
         action: "update",
         changes: data
       });
+      const updatedRecord = await this.getById(id);
+      if (updatedRecord) {
+        return updatedRecord;
+      }
       return updated;
     },
     async delete(id) {
@@ -6938,10 +7086,15 @@ function createCrudRoutes(app2, basePath, serviceFactory, createSchema, updateSc
     const body = await c.req.json();
     const parsed = createSchema.safeParse(body);
     if (!parsed.success) {
-      return c.json({ error: "Invalid request body", details: parsed.error?.errors }, 400);
+      return c.json(
+        { error: "Invalid request body", details: parsed.error?.errors },
+        400
+      );
     }
     const service = serviceFactory(c.env.DB);
-    const item = await service.create(parsed.data);
+    const item = await service.create(
+      parsed.data
+    );
     return c.json(item, 201);
   });
   app2.put(`${basePath}/:id`, async (c) => {
@@ -6949,14 +7102,41 @@ function createCrudRoutes(app2, basePath, serviceFactory, createSchema, updateSc
     const body = await c.req.json();
     const parsed = updateSchema.safeParse(body);
     if (!parsed.success) {
-      return c.json({ error: "Invalid request body", details: parsed.error?.errors }, 400);
+      console.error(
+        "Validation error:",
+        JSON.stringify(parsed.error?.errors, null, 2)
+      );
+      console.error("Request body:", JSON.stringify(body, null, 2));
+      return c.json(
+        { error: "Invalid request body", details: parsed.error?.errors },
+        400
+      );
     }
-    const service = serviceFactory(c.env.DB);
-    const item = await service.update(id, parsed.data);
-    if (!item) {
-      return c.json({ error: `${entityName} not found` }, 404);
+    try {
+      const service = serviceFactory(c.env.DB);
+      const item = await service.update(id, parsed.data);
+      if (!item) {
+        return c.json({ error: `${entityName} not found` }, 404);
+      }
+      return c.json(item);
+    } catch (error) {
+      console.error(`Error updating ${entityName}:`, error);
+      console.error(
+        "Error details:",
+        error instanceof Error ? error.message : String(error)
+      );
+      console.error(
+        "Stack:",
+        error instanceof Error ? error.stack : "No stack trace"
+      );
+      return c.json(
+        {
+          error: "Internal server error",
+          message: error instanceof Error ? error.message : String(error)
+        },
+        500
+      );
     }
-    return c.json(item);
   });
   app2.delete(`${basePath}/:id`, async (c) => {
     const id = c.req.param("id");
@@ -7204,6 +7384,90 @@ function registerOrganizationRoutes(app2) {
 }
 __name(registerOrganizationRoutes, "registerOrganizationRoutes");
 
+// src/services/department.service.ts
+var DepartmentService = class extends BaseService {
+  constructor(db) {
+    super(db, "department");
+  }
+};
+__name(DepartmentService, "DepartmentService");
+
+// src/routes/department.routes.ts
+function registerDepartmentRoutes(app2) {
+  createCrudRoutes(
+    app2,
+    "/api/departments",
+    (db) => new DepartmentService(db),
+    CreateDepartmentSchema,
+    UpdateDepartmentSchema,
+    "Department"
+  );
+}
+__name(registerDepartmentRoutes, "registerDepartmentRoutes");
+
+// src/services/team.service.ts
+var TeamService = class extends BaseService {
+  constructor(db) {
+    super(db, "team");
+  }
+};
+__name(TeamService, "TeamService");
+
+// src/routes/team.routes.ts
+function registerTeamRoutes(app2) {
+  createCrudRoutes(
+    app2,
+    "/api/teams",
+    (db) => new TeamService(db),
+    CreateTeamSchema,
+    UpdateTeamSchema,
+    "Team"
+  );
+}
+__name(registerTeamRoutes, "registerTeamRoutes");
+
+// src/services/position.service.ts
+var PositionService = class extends BaseService {
+  constructor(db) {
+    super(db, "position");
+  }
+};
+__name(PositionService, "PositionService");
+
+// src/routes/position.routes.ts
+function registerPositionRoutes(app2) {
+  createCrudRoutes(
+    app2,
+    "/api/positions",
+    (db) => new PositionService(db),
+    CreatePositionSchema,
+    UpdatePositionSchema,
+    "Position"
+  );
+}
+__name(registerPositionRoutes, "registerPositionRoutes");
+
+// src/services/organization-member.service.ts
+var OrganizationMemberService = class extends BaseService {
+  constructor(db) {
+    super(db, "organizationMember");
+  }
+};
+__name(OrganizationMemberService, "OrganizationMemberService");
+
+// src/routes/organization-member.routes.ts
+function registerOrganizationMemberRoutes(app2) {
+  createCrudRoutes(
+    app2,
+    "/api/organization-members",
+    (db) => new OrganizationMemberService(db),
+    CreateOrganizationMemberSchema,
+    UpdateOrganizationMemberSchema,
+    "OrganizationMember"
+  );
+}
+__name(registerOrganizationMemberRoutes, "registerOrganizationMemberRoutes");
+
 // src/services/selection-process.service.ts
 var SelectionProcessService = class extends BaseService {
   constructor(db) {
@@ -7267,6 +7531,27 @@ function registerFaqRoutes(app2) {
 }
 __name(registerFaqRoutes, "registerFaqRoutes");
 
+// src/services/faq-category.service.ts
+var FaqCategoryService = class extends BaseService {
+  constructor(db) {
+    super(db, "faqCategory");
+  }
+};
+__name(FaqCategoryService, "FaqCategoryService");
+
+// src/routes/faq-category.routes.ts
+function registerFaqCategoryRoutes(app2) {
+  createCrudRoutes(
+    app2,
+    "/api/faq-categories",
+    (db) => new FaqCategoryService(db),
+    CreateFaqCategorySchema,
+    UpdateFaqCategorySchema,
+    "FAQ Category"
+  );
+}
+__name(registerFaqCategoryRoutes, "registerFaqCategoryRoutes");
+
 // src/services/history.service.ts
 var HistoryService = class {
   db;
@@ -7316,9 +7601,14 @@ app.get("/", (c) => {
       "/api/job-roles",
       "/api/competitor-jobs",
       "/api/organizations",
+      "/api/departments",
+      "/api/teams",
+      "/api/positions",
+      "/api/organization-members",
       "/api/selection-processes",
       "/api/recruitment-channels",
       "/api/faqs",
+      "/api/faq-categories",
       "/api/history"
     ]
   });
@@ -7331,9 +7621,14 @@ registerJobPostingRoutes(app);
 registerJobRoleRoutes(app);
 registerCompetitorJobRoutes(app);
 registerOrganizationRoutes(app);
+registerDepartmentRoutes(app);
+registerTeamRoutes(app);
+registerPositionRoutes(app);
+registerOrganizationMemberRoutes(app);
 registerSelectionProcessRoutes(app);
 registerRecruitmentChannelRoutes(app);
 registerFaqRoutes(app);
+registerFaqCategoryRoutes(app);
 registerHistoryRoutes(app);
 var src_default = app;
 
@@ -7378,7 +7673,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-MkMlDd/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-MhQREt/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -7410,7 +7705,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-MkMlDd/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-MhQREt/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

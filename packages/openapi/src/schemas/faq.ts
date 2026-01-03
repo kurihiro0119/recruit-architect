@@ -5,11 +5,12 @@ export const FaqVisibilitySchema = z.enum(['internal', 'agt', 'public']);
 
 export const FaqSchema = z.object({
   id: IdSchema,
-  category: z.string(),
+  categoryId: z.string(), // FAQカテゴリID
+  category: z.string().optional(), // 後方互換性のため残す（表示用）
   question: z.string(),
-  answer: z.string(),
+  answer: z.string().optional(), // 回答は任意
   visibility: FaqVisibilitySchema,
-  order: z.number().optional(),
+  sortOrder: z.number().optional(), // データベースではsort_order
   notes: z.string().optional(),
   comments: z.array(CommentSchema).optional(),
 }).merge(TimestampSchema).merge(AuditSchema);
