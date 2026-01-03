@@ -1,0 +1,14 @@
+.env
+.idea
+/.vscode
+/node_modules
+/dist
+/build
+/logs
+/tmp
+/cache
+/backup
+/temp
+/test
+/test-results
+/test-output
