@@ -5,7 +5,8 @@ export const InitiativeStatusSchema = z.enum(['planned', 'in_progress', 'complet
 
 export const InitiativeSchema = z.object({
   id: IdSchema,
-  timing: z.string(),
+  timingStart: z.string(), // ISO 8601 date string
+  timingEnd: z.string().optional(), // ISO 8601 date string
   schedule: z.string().optional(),
   milestone: z.string(),
   mainOwner: z.string(),

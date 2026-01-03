@@ -2,7 +2,8 @@ import { z } from 'zod';
 export declare const InitiativeStatusSchema: z.ZodEnum<["planned", "in_progress", "completed", "on_hold"]>;
 export declare const InitiativeSchema: z.ZodObject<{
     id: z.ZodString;
-    timing: z.ZodString;
+    timingStart: z.ZodString;
+    timingEnd: z.ZodOptional<z.ZodString>;
     schedule: z.ZodOptional<z.ZodString>;
     milestone: z.ZodString;
     mainOwner: z.ZodString;
@@ -38,7 +39,7 @@ export declare const InitiativeSchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     id: string;
-    timing: string;
+    timingStart: string;
     milestone: string;
     mainOwner: string;
     outputAndGoal: string;
@@ -53,12 +54,13 @@ export declare const InitiativeSchema: z.ZodObject<{
         authorId?: string | undefined;
         authorName?: string | undefined;
     }[] | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
 }, {
     createdAt: string;
     updatedAt: string;
     id: string;
-    timing: string;
+    timingStart: string;
     milestone: string;
     mainOwner: string;
     outputAndGoal: string;
@@ -73,11 +75,13 @@ export declare const InitiativeSchema: z.ZodObject<{
         authorId?: string | undefined;
         authorName?: string | undefined;
     }[] | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
 }>;
 export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     id: z.ZodString;
-    timing: z.ZodString;
+    timingStart: z.ZodString;
+    timingEnd: z.ZodOptional<z.ZodString>;
     schedule: z.ZodOptional<z.ZodString>;
     milestone: z.ZodString;
     mainOwner: z.ZodString;
@@ -110,7 +114,7 @@ export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     createdBy: z.ZodOptional<z.ZodString>;
     updatedBy: z.ZodOptional<z.ZodString>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
-    timing: string;
+    timingStart: string;
     milestone: string;
     mainOwner: string;
     outputAndGoal: string;
@@ -118,9 +122,10 @@ export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     notes?: string | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
 }, {
-    timing: string;
+    timingStart: string;
     milestone: string;
     mainOwner: string;
     outputAndGoal: string;
@@ -128,6 +133,7 @@ export declare const CreateInitiativeSchema: z.ZodObject<Omit<{
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     notes?: string | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
 }>;
 export declare const UpdateInitiativeSchema: z.ZodObject<{
@@ -135,7 +141,8 @@ export declare const UpdateInitiativeSchema: z.ZodObject<{
     createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    timing: z.ZodOptional<z.ZodString>;
+    timingStart: z.ZodOptional<z.ZodString>;
+    timingEnd: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     schedule: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     milestone: z.ZodOptional<z.ZodString>;
     mainOwner: z.ZodOptional<z.ZodString>;
@@ -145,7 +152,8 @@ export declare const UpdateInitiativeSchema: z.ZodObject<{
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     notes?: string | undefined;
-    timing?: string | undefined;
+    timingStart?: string | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
     milestone?: string | undefined;
     mainOwner?: string | undefined;
@@ -155,7 +163,8 @@ export declare const UpdateInitiativeSchema: z.ZodObject<{
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     notes?: string | undefined;
-    timing?: string | undefined;
+    timingStart?: string | undefined;
+    timingEnd?: string | undefined;
     schedule?: string | undefined;
     milestone?: string | undefined;
     mainOwner?: string | undefined;

@@ -11,6 +11,7 @@ interface DataTableProps<T> {
   columns: Column<T>[];
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
+  onDetail?: (item: T) => void;
   onCreate?: () => void;
   title: string;
   loading?: boolean;
@@ -21,6 +22,7 @@ export function DataTable<T extends { id: string }>({
   columns,
   onEdit,
   onDelete,
+  onDetail,
   onCreate,
   title,
   loading,
@@ -72,7 +74,7 @@ export function DataTable<T extends { id: string }>({
                     {col.label}
                   </th>
                 ))}
-                {(onEdit || onDelete) && (
+                {(onEdit || onDelete || onDetail) && (
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     操作
                   </th>
@@ -87,9 +89,17 @@ export function DataTable<T extends { id: string }>({
                       {col.render ? col.render(item) : getValue(item, String(col.key))}
                     </td>
                   ))}
-                  {(onEdit || onDelete) && (
+                  {(onEdit || onDelete || onDetail) && (
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                       <div className="flex justify-end gap-2">
+                        {onDetail && (
+                          <button
+                            onClick={() => onDetail(item)}
+                            className="px-3 py-1 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                          >
+                            詳細
+                          </button>
+                        )}
                         {onEdit && (
                           <button
                             onClick={() => onEdit(item)}

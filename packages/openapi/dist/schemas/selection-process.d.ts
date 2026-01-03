@@ -38,8 +38,8 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     id: string;
-    stepNo: number;
     phaseName: string;
+    stepNo: number;
     processType: "current" | "ideal";
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
@@ -58,8 +58,8 @@ export declare const SelectionProcessSchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     id: string;
-    stepNo: number;
     phaseName: string;
+    stepNo: number;
     processType: "current" | "ideal";
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
@@ -110,8 +110,8 @@ export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
     createdBy: z.ZodOptional<z.ZodString>;
     updatedBy: z.ZodOptional<z.ZodString>;
 }, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
-    stepNo: number;
     phaseName: string;
+    stepNo: number;
     processType: "current" | "ideal";
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
@@ -120,8 +120,8 @@ export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
     owner?: string | undefined;
     requiredDays?: number | undefined;
 }, {
-    stepNo: number;
     phaseName: string;
+    stepNo: number;
     processType: "current" | "ideal";
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
@@ -133,9 +133,9 @@ export declare const CreateSelectionProcessSchema: z.ZodObject<Omit<{
 export declare const UpdateSelectionProcessSchema: z.ZodObject<{
     createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    phaseName: z.ZodOptional<z.ZodString>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     stepNo: z.ZodOptional<z.ZodNumber>;
-    phaseName: z.ZodOptional<z.ZodString>;
     detailedProcess: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     owner: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     requiredDays: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
@@ -143,9 +143,9 @@ export declare const UpdateSelectionProcessSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
+    phaseName?: string | undefined;
     notes?: string | undefined;
     stepNo?: number | undefined;
-    phaseName?: string | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
     requiredDays?: number | undefined;
@@ -153,9 +153,9 @@ export declare const UpdateSelectionProcessSchema: z.ZodObject<{
 }, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
+    phaseName?: string | undefined;
     notes?: string | undefined;
     stepNo?: number | undefined;
-    phaseName?: string | undefined;
     detailedProcess?: string | undefined;
     owner?: string | undefined;
     requiredDays?: number | undefined;

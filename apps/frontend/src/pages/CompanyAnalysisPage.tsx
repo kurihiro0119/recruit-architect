@@ -92,7 +92,14 @@ export function CompanyAnalysisPage() {
   const columns = [
     { key: 'companyName', label: '企業名' },
     { key: 'representative', label: '代表者' },
-    { key: 'foundedDate', label: '設立日' },
+    {
+      key: 'foundedDate',
+      label: '設立日',
+      render: (item: CompanyAnalysis) => {
+        if (!item.foundedDate) return '-';
+        return new Date(item.foundedDate).toLocaleDateString('ja-JP');
+      },
+    },
     { key: 'employees', label: '従業員数' },
     { key: 'address', label: '所在地' },
   ];
@@ -129,12 +136,17 @@ export function CompanyAnalysisPage() {
             value={formData.representative}
             onChange={(v) => setFormData({ ...formData, representative: String(v) })}
           />
-          <FormField
-            label="設立日"
-            name="foundedDate"
-            value={formData.foundedDate}
-            onChange={(v) => setFormData({ ...formData, foundedDate: String(v) })}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              設立日
+            </label>
+            <input
+              type="date"
+              value={formData.foundedDate}
+              onChange={(e) => setFormData({ ...formData, foundedDate: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
           <FormField
             label="従業員数"
             name="employees"

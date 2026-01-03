@@ -6,7 +6,8 @@ import { initiativeApi } from '../lib/api';
 
 interface Initiative {
   id: string;
-  timing: string;
+  timingStart: string;
+  timingEnd?: string;
   schedule?: string;
   milestone: string;
   mainOwner: string;
@@ -23,7 +24,8 @@ const statusOptions = [
 ];
 
 const initialFormData = {
-  timing: '',
+  timingStart: '',
+  timingEnd: '',
   schedule: '',
   milestone: '',
   mainOwner: '',
@@ -63,7 +65,8 @@ export function InitiativePage() {
   const handleEdit = (item: Initiative) => {
     setEditingItem(item);
     setFormData({
-      timing: item.timing,
+      timingStart: item.timingStart,
+      timingEnd: item.timingEnd || '',
       schedule: item.schedule || '',
       milestone: item.milestone,
       mainOwner: item.mainOwner,
@@ -100,7 +103,15 @@ export function InitiativePage() {
   };
 
   const columns = [
-    { key: 'timing', label: '時期' },
+    {
+      key: 'timing',
+      label: '時期',
+      render: (item: Initiative) => {
+        const start = new Date(item.timingStart).toLocaleDateString('ja-JP');
+        const end = item.timingEnd ? new Date(item.timingEnd).toLocaleDateString('ja-JP') : '';
+        return end ? `${start} ～ ${end}` : start;
+      },
+    },
     { key: 'schedule', label: '日程' },
     { key: 'milestone', label: 'マイルストーン' },
     { key: 'mainOwner', label: '主担当' },
@@ -146,14 +157,33 @@ export function InitiativePage() {
         title={editingItem ? '施策編集' : '施策新規作成'}
       >
         <form onSubmit={handleSubmit}>
-          <FormField
-            label="時期"
-            name="timing"
-            value={formData.timing}
-            onChange={(v) => setFormData({ ...formData, timing: String(v) })}
-            required
-            placeholder="例: 導入準備"
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              時期 <span className="text-red-500">*</span>
+            </label>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">開始日</label>
+                <input
+                  type="date"
+                  value={formData.timingStart}
+                  onChange={(e) => setFormData({ ...formData, timingStart: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">終了日（任意）</label>
+                <input
+                  type="date"
+                  value={formData.timingEnd}
+                  onChange={(e) => setFormData({ ...formData, timingEnd: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  min={formData.timingStart}
+                />
+              </div>
+            </div>
+          </div>
           <FormField
             label="日程"
             name="schedule"

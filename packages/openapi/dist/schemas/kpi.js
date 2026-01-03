@@ -1,23 +1,23 @@
 import { z } from 'zod';
 import { IdSchema, TimestampSchema, AuditSchema, CommentSchema } from './common';
-export const KpiTypeSchema = z.enum(['headcount', 'conversion_rate', 'timeline']);
+export const PhaseDataSchema = z.object({
+    phaseName: z.string(),
+    targetValue: z.number().optional(),
+    actualValue: z.number().optional(),
+});
 export const KpiSchema = z.object({
     id: IdSchema,
-    period: z.string(),
+    periodStart: z.string(), // ISO 8601 date string
+    periodEnd: z.string(), // ISO 8601 date string
     phase: z.string().optional(),
-    kpiType: KpiTypeSchema,
-    targetValue: z.number(),
-    actualValue: z.number().optional(),
-    difference: z.number().optional(),
-    unit: z.string().optional(),
     notes: z.string().optional(),
+    phaseData: z.array(PhaseDataSchema).optional(),
     comments: z.array(CommentSchema).optional(),
 }).merge(TimestampSchema).merge(AuditSchema);
 export const CreateKpiSchema = KpiSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
-    difference: true,
     comments: true,
 });
 export const UpdateKpiSchema = CreateKpiSchema.partial();

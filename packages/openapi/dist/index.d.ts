@@ -1,4 +1,5 @@
 export * from './schemas/kpi';
+export * from './schemas/kpi-snapshot';
 export * from './schemas/initiative';
 export * from './schemas/company-analysis';
 export * from './schemas/job-posting';

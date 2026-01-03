@@ -4,14 +4,11 @@
 -- KPIs table
 CREATE TABLE IF NOT EXISTS kpis (
   id TEXT PRIMARY KEY,
-  period TEXT NOT NULL,
+  period_start TEXT NOT NULL,
+  period_end TEXT NOT NULL,
   phase TEXT,
-  kpi_type TEXT NOT NULL CHECK (kpi_type IN ('headcount', 'conversion_rate', 'timeline')),
-  target_value REAL NOT NULL,
-  actual_value REAL,
-  difference REAL,
-  unit TEXT,
   notes TEXT,
+  phase_data TEXT, -- JSON array
   comments TEXT, -- JSON array
   created_by TEXT,
   updated_by TEXT,
@@ -22,7 +19,8 @@ CREATE TABLE IF NOT EXISTS kpis (
 -- Initiatives table
 CREATE TABLE IF NOT EXISTS initiatives (
   id TEXT PRIMARY KEY,
-  timing TEXT NOT NULL,
+  timing_start TEXT NOT NULL,
+  timing_end TEXT,
   schedule TEXT,
   milestone TEXT NOT NULL,
   main_owner TEXT NOT NULL,
@@ -180,6 +178,21 @@ CREATE TABLE IF NOT EXISTS faqs (
   updated_at TEXT NOT NULL
 );
 
+-- KPI snapshots table (日次スナップショット)
+CREATE TABLE IF NOT EXISTS kpi_snapshots (
+  id TEXT PRIMARY KEY,
+  kpi_id TEXT NOT NULL,
+  snapshot_date TEXT NOT NULL, -- ISO 8601 date string (日付のみ)
+  phase_data TEXT, -- JSON array
+  comments TEXT,
+  created_by TEXT,
+  updated_by TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  FOREIGN KEY (kpi_id) REFERENCES kpis(id) ON DELETE CASCADE,
+  UNIQUE(kpi_id, snapshot_date)
+);
+
 -- History table
 CREATE TABLE IF NOT EXISTS history (
   id TEXT PRIMARY KEY,
@@ -193,7 +206,10 @@ CREATE TABLE IF NOT EXISTS history (
 );
 
 -- Indexes for better query performance
-CREATE INDEX IF NOT EXISTS idx_kpis_period ON kpis(period);
+CREATE INDEX IF NOT EXISTS idx_kpis_period_start ON kpis(period_start);
+CREATE INDEX IF NOT EXISTS idx_kpis_period_end ON kpis(period_end);
+CREATE INDEX IF NOT EXISTS idx_kpi_snapshots_kpi_id ON kpi_snapshots(kpi_id);
+CREATE INDEX IF NOT EXISTS idx_kpi_snapshots_date ON kpi_snapshots(snapshot_date);
 CREATE INDEX IF NOT EXISTS idx_initiatives_status ON initiatives(status);
 CREATE INDEX IF NOT EXISTS idx_job_postings_status ON job_postings(status);
 CREATE INDEX IF NOT EXISTS idx_history_entity ON history(entity_id, entity_type);

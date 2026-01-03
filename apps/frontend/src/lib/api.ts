@@ -34,6 +34,15 @@ export const kpiApi = {
   delete: (id: string) => api.delete(`/api/kpis/${id}`),
 };
 
+export const kpiSnapshotApi = {
+  getAll: () => api.get('/api/kpi-snapshots'),
+  getById: (id: string) => api.get(`/api/kpi-snapshots/${id}`),
+  getByKpiId: (kpiId: string) => api.get(`/api/kpi-snapshots/kpi/${kpiId}`),
+  create: (data: unknown) => api.post('/api/kpi-snapshots', data),
+  update: (id: string, data: unknown) => api.put(`/api/kpi-snapshots/${id}`, data),
+  delete: (id: string) => api.delete(`/api/kpi-snapshots/${id}`),
+};
+
 export const initiativeApi = {
   getAll: () => api.get('/api/initiatives'),
   getById: (id: string) => api.get(`/api/initiatives/${id}`),

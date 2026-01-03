@@ -56,7 +56,7 @@ export const CompanyAnalysisSchema = z.object({
     id: IdSchema,
     companyName: z.string(),
     representative: z.string().optional(),
-    foundedDate: z.string().optional(),
+    foundedDate: z.string().optional(), // ISO 8601 date string
     employees: z.string().optional(),
     address: z.string().optional(),
     competitors: z.array(CompetitorSchema).optional(),

@@ -1,15 +1,36 @@
 import { z } from 'zod';
-export declare const KpiTypeSchema: z.ZodEnum<["headcount", "conversion_rate", "timeline"]>;
+export declare const PhaseDataSchema: z.ZodObject<{
+    phaseName: z.ZodString;
+    targetValue: z.ZodOptional<z.ZodNumber>;
+    actualValue: z.ZodOptional<z.ZodNumber>;
+}, "strip", z.ZodTypeAny, {
+    phaseName: string;
+    targetValue?: number | undefined;
+    actualValue?: number | undefined;
+}, {
+    phaseName: string;
+    targetValue?: number | undefined;
+    actualValue?: number | undefined;
+}>;
 export declare const KpiSchema: z.ZodObject<{
     id: z.ZodString;
-    period: z.ZodString;
+    periodStart: z.ZodString;
+    periodEnd: z.ZodString;
     phase: z.ZodOptional<z.ZodString>;
-    kpiType: z.ZodEnum<["headcount", "conversion_rate", "timeline"]>;
-    targetValue: z.ZodNumber;
-    actualValue: z.ZodOptional<z.ZodNumber>;
-    difference: z.ZodOptional<z.ZodNumber>;
-    unit: z.ZodOptional<z.ZodString>;
     notes: z.ZodOptional<z.ZodString>;
+    phaseData: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        phaseName: z.ZodString;
+        targetValue: z.ZodOptional<z.ZodNumber>;
+        actualValue: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }>, "many">>;
     comments: z.ZodOptional<z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         content: z.ZodString;
@@ -39,16 +60,17 @@ export declare const KpiSchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     id: string;
-    period: string;
-    kpiType: "headcount" | "conversion_rate" | "timeline";
-    targetValue: number;
+    periodStart: string;
+    periodEnd: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     phase?: string | undefined;
-    actualValue?: number | undefined;
-    difference?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
     comments?: {
         createdAt: string;
         id: string;
@@ -60,16 +82,17 @@ export declare const KpiSchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     id: string;
-    period: string;
-    kpiType: "headcount" | "conversion_rate" | "timeline";
-    targetValue: number;
+    periodStart: string;
+    periodEnd: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     phase?: string | undefined;
-    actualValue?: number | undefined;
-    difference?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
     comments?: {
         createdAt: string;
         id: string;
@@ -80,14 +103,23 @@ export declare const KpiSchema: z.ZodObject<{
 }>;
 export declare const CreateKpiSchema: z.ZodObject<Omit<{
     id: z.ZodString;
-    period: z.ZodString;
+    periodStart: z.ZodString;
+    periodEnd: z.ZodString;
     phase: z.ZodOptional<z.ZodString>;
-    kpiType: z.ZodEnum<["headcount", "conversion_rate", "timeline"]>;
-    targetValue: z.ZodNumber;
-    actualValue: z.ZodOptional<z.ZodNumber>;
-    difference: z.ZodOptional<z.ZodNumber>;
-    unit: z.ZodOptional<z.ZodString>;
     notes: z.ZodOptional<z.ZodString>;
+    phaseData: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        phaseName: z.ZodString;
+        targetValue: z.ZodOptional<z.ZodNumber>;
+        actualValue: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }>, "many">>;
     comments: z.ZodOptional<z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         content: z.ZodString;
@@ -113,59 +145,77 @@ export declare const CreateKpiSchema: z.ZodObject<Omit<{
 } & {
     createdBy: z.ZodOptional<z.ZodString>;
     updatedBy: z.ZodOptional<z.ZodString>;
-}, "createdAt" | "updatedAt" | "id" | "difference" | "comments">, "strip", z.ZodTypeAny, {
-    period: string;
-    kpiType: "headcount" | "conversion_rate" | "timeline";
-    targetValue: number;
+}, "createdAt" | "updatedAt" | "id" | "comments">, "strip", z.ZodTypeAny, {
+    periodStart: string;
+    periodEnd: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     phase?: string | undefined;
-    actualValue?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
 }, {
-    period: string;
-    kpiType: "headcount" | "conversion_rate" | "timeline";
-    targetValue: number;
+    periodStart: string;
+    periodEnd: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
     phase?: string | undefined;
-    actualValue?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
 }>;
 export declare const UpdateKpiSchema: z.ZodObject<{
     createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    period: z.ZodOptional<z.ZodString>;
+    periodStart: z.ZodOptional<z.ZodString>;
+    periodEnd: z.ZodOptional<z.ZodString>;
     phase: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    kpiType: z.ZodOptional<z.ZodEnum<["headcount", "conversion_rate", "timeline"]>>;
-    targetValue: z.ZodOptional<z.ZodNumber>;
-    actualValue: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
-    unit: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    phaseData: z.ZodOptional<z.ZodOptional<z.ZodArray<z.ZodObject<{
+        phaseName: z.ZodString;
+        targetValue: z.ZodOptional<z.ZodNumber>;
+        actualValue: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }, {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }>, "many">>>;
 }, "strip", z.ZodTypeAny, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    period?: string | undefined;
+    periodStart?: string | undefined;
+    periodEnd?: string | undefined;
     phase?: string | undefined;
-    kpiType?: "headcount" | "conversion_rate" | "timeline" | undefined;
-    targetValue?: number | undefined;
-    actualValue?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
 }, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    period?: string | undefined;
+    periodStart?: string | undefined;
+    periodEnd?: string | undefined;
     phase?: string | undefined;
-    kpiType?: "headcount" | "conversion_rate" | "timeline" | undefined;
-    targetValue?: number | undefined;
-    actualValue?: number | undefined;
-    unit?: string | undefined;
     notes?: string | undefined;
+    phaseData?: {
+        phaseName: string;
+        targetValue?: number | undefined;
+        actualValue?: number | undefined;
+    }[] | undefined;
 }>;
-export type KpiType = z.infer<typeof KpiTypeSchema>;
+export type PhaseData = z.infer<typeof PhaseDataSchema>;
 export type Kpi = z.infer<typeof KpiSchema>;
 export type CreateKpi = z.infer<typeof CreateKpiSchema>;
 export type UpdateKpi = z.infer<typeof UpdateKpiSchema>;

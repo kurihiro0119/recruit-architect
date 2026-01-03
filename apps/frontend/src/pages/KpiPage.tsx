@@ -2,34 +2,44 @@ import { useEffect, useState } from 'react';
 import { DataTable } from '../components/DataTable';
 import { Modal } from '../components/Modal';
 import { FormField } from '../components/FormField';
-import { kpiApi } from '../lib/api';
+import { kpiApi, kpiSnapshotApi } from '../lib/api';
+
+interface PhaseData {
+  phaseName: string;
+  targetValue?: number;
+  actualValue?: number;
+}
 
 interface Kpi {
   id: string;
-  period: string;
+  periodStart: string;
+  periodEnd: string;
   phase?: string;
-  kpiType: string;
-  targetValue: number;
-  actualValue?: number;
-  difference?: number;
-  unit?: string;
   notes?: string;
+  phaseData?: PhaseData[];
 }
 
-const kpiTypeOptions = [
-  { value: 'headcount', label: '人数KPI' },
-  { value: 'conversion_rate', label: '歩留まりKPI' },
-  { value: 'timeline', label: 'タイムラインKPI' },
+const defaultPhases = [
+  'エントリー',
+  '書類通過',
+  'カジュアル面談',
+  '一次面接',
+  '二次面接',
+  '最終面接',
+  '内定',
+  '承諾',
 ];
 
 const initialFormData = {
-  period: '',
+  periodStart: '',
+  periodEnd: '',
   phase: '',
-  kpiType: 'headcount',
-  targetValue: 0,
-  actualValue: 0,
-  unit: '',
   notes: '',
+  phaseData: defaultPhases.map((phaseName) => ({
+    phaseName,
+    targetValue: undefined,
+    actualValue: undefined,
+  })),
 };
 
 export function KpiPage() {
@@ -62,14 +72,21 @@ export function KpiPage() {
 
   const handleEdit = (kpi: Kpi) => {
     setEditingKpi(kpi);
+    const existingPhaseData = kpi.phaseData || [];
+    const phaseDataMap = new Map(existingPhaseData.map((pd) => [pd.phaseName, pd]));
     setFormData({
-      period: kpi.period,
+      periodStart: kpi.periodStart,
+      periodEnd: kpi.periodEnd,
       phase: kpi.phase || '',
-      kpiType: kpi.kpiType,
-      targetValue: kpi.targetValue,
-      actualValue: kpi.actualValue || 0,
-      unit: kpi.unit || '',
       notes: kpi.notes || '',
+      phaseData: defaultPhases.map((phaseName) => {
+        const existing = phaseDataMap.get(phaseName);
+        return {
+          phaseName,
+          targetValue: existing?.targetValue,
+          actualValue: existing?.actualValue,
+        };
+      }),
     });
     setModalOpen(true);
   };
@@ -87,10 +104,19 @@ export function KpiPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // phaseDataから空のエントリを除外
+      const filteredPhaseData = formData.phaseData?.filter(
+        (pd) => pd.targetValue !== undefined || pd.actualValue !== undefined
+      );
+      const submitData = {
+        ...formData,
+        phaseData: filteredPhaseData && filteredPhaseData.length > 0 ? filteredPhaseData : undefined,
+      };
+
       if (editingKpi) {
-        await kpiApi.update(editingKpi.id, formData);
+        await kpiApi.update(editingKpi.id, submitData);
       } else {
-        await kpiApi.create(formData);
+        await kpiApi.create(submitData);
       }
       setModalOpen(false);
       fetchKpis();
@@ -99,31 +125,69 @@ export function KpiPage() {
     }
   };
 
+  // 進捗状況を計算する関数
+  const calculateProgress = (kpi: Kpi) => {
+    if (!kpi.phaseData || kpi.phaseData.length === 0) return null;
+    
+    const phases = kpi.phaseData;
+    const result: { phaseName: string; count: number; conversionRate?: number }[] = [];
+    
+    for (let i = 0; i < phases.length; i++) {
+      const phase = phases[i];
+      const actualValue = phase.actualValue ?? 0;
+      result.push({
+        phaseName: phase.phaseName,
+        count: actualValue,
+        conversionRate: i > 0 && phases[i - 1].actualValue 
+          ? (actualValue / phases[i - 1].actualValue) * 100 
+          : undefined,
+      });
+    }
+    
+    return result;
+  };
+
   const columns = [
-    { key: 'period', label: '期間' },
+    {
+      key: 'period',
+      label: '期間',
+      render: (kpi: Kpi) => {
+        const start = new Date(kpi.periodStart).toLocaleDateString('ja-JP');
+        const end = new Date(kpi.periodEnd).toLocaleDateString('ja-JP');
+        return `${start} ～ ${end}`;
+      },
+    },
     { key: 'phase', label: 'フェーズ' },
     {
-      key: 'kpiType',
-      label: 'KPI種別',
-      render: (kpi: Kpi) => kpiTypeOptions.find((o) => o.value === kpi.kpiType)?.label || kpi.kpiType,
-    },
-    { key: 'targetValue', label: '目標値' },
-    { key: 'actualValue', label: '実績値' },
-    {
-      key: 'difference',
-      label: '差分',
+      key: 'progress',
+      label: '進捗状況',
       render: (kpi: Kpi) => {
-        if (kpi.actualValue === undefined) return '-';
-        const diff = kpi.actualValue - kpi.targetValue;
+        const progress = calculateProgress(kpi);
+        if (!progress || progress.length === 0) return '-';
+        
+        // 主要なフェーズのみ表示（エントリー、書類通過、一次面接、最終面接、内定、承諾）
+        const keyPhases = ['エントリー', '書類通過', '一次面接', '最終面接', '内定', '承諾'];
+        const displayPhases = progress.filter(p => keyPhases.includes(p.phaseName));
+        
         return (
-          <span className={diff >= 0 ? 'text-green-600' : 'text-red-600'}>
-            {diff >= 0 ? '+' : ''}{diff}
-          </span>
+          <div className="flex gap-2 text-xs">
+            {displayPhases.map((p, idx) => (
+              <div key={p.phaseName} className="flex flex-col items-center">
+                <span className="font-medium">{p.count}</span>
+                {p.conversionRate !== undefined && (
+                  <span className="text-gray-500">{p.conversionRate.toFixed(0)}%</span>
+                )}
+              </div>
+            ))}
+          </div>
         );
       },
     },
-    { key: 'unit', label: '単位' },
   ];
+
+  const handleDetail = (kpi: Kpi) => {
+    window.location.href = `/kpis/${kpi.id}`;
+  };
 
   return (
     <div>
@@ -133,6 +197,7 @@ export function KpiPage() {
         columns={columns}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onDetail={handleDetail}
         onCreate={handleCreate}
         title="KPI一覧"
         loading={loading}
@@ -144,14 +209,34 @@ export function KpiPage() {
         title={editingKpi ? 'KPI編集' : 'KPI新規作成'}
       >
         <form onSubmit={handleSubmit}>
-          <FormField
-            label="期間"
-            name="period"
-            value={formData.period}
-            onChange={(v) => setFormData({ ...formData, period: String(v) })}
-            required
-            placeholder="例: 2024年Q1"
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              期間 <span className="text-red-500">*</span>
+            </label>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">開始日</label>
+                <input
+                  type="date"
+                  value={formData.periodStart}
+                  onChange={(e) => setFormData({ ...formData, periodStart: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">終了日</label>
+                <input
+                  type="date"
+                  value={formData.periodEnd}
+                  onChange={(e) => setFormData({ ...formData, periodEnd: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                  min={formData.periodStart}
+                />
+              </div>
+            </div>
+          </div>
           <FormField
             label="フェーズ"
             name="phase"
@@ -160,43 +245,77 @@ export function KpiPage() {
             placeholder="例: 採用強化期"
           />
           <FormField
-            label="KPI種別"
-            name="kpiType"
-            type="select"
-            value={formData.kpiType}
-            onChange={(v) => setFormData({ ...formData, kpiType: String(v) })}
-            options={kpiTypeOptions}
-            required
-          />
-          <FormField
-            label="目標値"
-            name="targetValue"
-            type="number"
-            value={formData.targetValue}
-            onChange={(v) => setFormData({ ...formData, targetValue: Number(v) })}
-            required
-          />
-          <FormField
-            label="実績値"
-            name="actualValue"
-            type="number"
-            value={formData.actualValue}
-            onChange={(v) => setFormData({ ...formData, actualValue: Number(v) })}
-          />
-          <FormField
-            label="単位"
-            name="unit"
-            value={formData.unit}
-            onChange={(v) => setFormData({ ...formData, unit: String(v) })}
-            placeholder="例: 人, %"
-          />
-          <FormField
             label="備考"
             name="notes"
             type="textarea"
             value={formData.notes}
             onChange={(v) => setFormData({ ...formData, notes: String(v) })}
           />
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              フェーズごとの目標・実績
+            </label>
+            <div className="border border-gray-300 rounded-lg overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-700 border-b">
+                      フェーズ
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-700 border-b">
+                      目標値
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-700 border-b">
+                      実績値
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {formData.phaseData?.map((phase, index) => (
+                    <tr key={phase.phaseName}>
+                      <td className="px-3 py-2 text-sm text-gray-900">
+                        {phase.phaseName}
+                      </td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="number"
+                          value={phase.targetValue ?? ''}
+                          onChange={(e) => {
+                            const newPhaseData = [...(formData.phaseData || [])];
+                            newPhaseData[index] = {
+                              ...phase,
+                              targetValue: e.target.value ? Number(e.target.value) : undefined,
+                            };
+                            setFormData({ ...formData, phaseData: newPhaseData });
+                          }}
+                          className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="0"
+                        />
+                      </td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="number"
+                          value={phase.actualValue ?? ''}
+                          onChange={(e) => {
+                            const newPhaseData = [...(formData.phaseData || [])];
+                            newPhaseData[index] = {
+                              ...phase,
+                              actualValue: e.target.value ? Number(e.target.value) : undefined,
+                            };
+                            setFormData({ ...formData, phaseData: newPhaseData });
+                          }}
+                          className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="0"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"

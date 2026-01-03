@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { KpiPage } from './pages/KpiPage';
+import { KpiDetailPage } from './pages/KpiDetailPage';
 import { InitiativePage } from './pages/InitiativePage';
 import { CompanyAnalysisPage } from './pages/CompanyAnalysisPage';
 import { JobPostingPage } from './pages/JobPostingPage';
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/kpis" element={<KpiPage />} />
+        <Route path="/kpis/:id" element={<KpiDetailPage />} />
         <Route path="/initiatives" element={<InitiativePage />} />
         <Route path="/company-analysis" element={<CompanyAnalysisPage />} />
         <Route path="/job-postings" element={<JobPostingPage />} />

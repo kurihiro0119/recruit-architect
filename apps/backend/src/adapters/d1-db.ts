@@ -59,7 +59,8 @@ function fromDbRecord<T>(record: Record<string, unknown>, jsonFields: string[] =
 
 // Table configurations with JSON fields
 const tableConfigs: Record<string, { tableName: string; jsonFields: string[] }> = {
-  kpi: { tableName: 'kpis', jsonFields: ['comments'] },
+  kpi: { tableName: 'kpis', jsonFields: ['comments', 'phaseData'] },
+  kpiSnapshot: { tableName: 'kpi_snapshots', jsonFields: ['phaseData'] },
   initiative: { tableName: 'initiatives', jsonFields: ['comments'] },
   companyAnalysis: {
     tableName: 'company_analyses',

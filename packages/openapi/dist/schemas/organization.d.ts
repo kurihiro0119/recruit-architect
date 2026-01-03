@@ -101,7 +101,6 @@ export declare const OrganizationSchema: z.ZodObject<{
     department: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -111,6 +110,7 @@ export declare const OrganizationSchema: z.ZodObject<{
         authorName?: string | undefined;
     }[] | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
@@ -129,7 +129,6 @@ export declare const OrganizationSchema: z.ZodObject<{
     department: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     comments?: {
         createdAt: string;
@@ -139,6 +138,7 @@ export declare const OrganizationSchema: z.ZodObject<{
         authorName?: string | undefined;
     }[] | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
@@ -218,9 +218,9 @@ export declare const CreateOrganizationSchema: z.ZodObject<Omit<{
     department: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
@@ -236,9 +236,9 @@ export declare const CreateOrganizationSchema: z.ZodObject<Omit<{
     department: string;
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
@@ -254,10 +254,10 @@ export declare const CreateOrganizationSchema: z.ZodObject<Omit<{
 export declare const UpdateOrganizationSchema: z.ZodObject<{
     createdBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     updatedBy: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    headcount: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
     notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     department: z.ZodOptional<z.ZodString>;
     role: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    headcount: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
     members: z.ZodOptional<z.ZodOptional<z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         department: z.ZodString;
@@ -293,10 +293,10 @@ export declare const UpdateOrganizationSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     department?: string | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
@@ -311,10 +311,10 @@ export declare const UpdateOrganizationSchema: z.ZodObject<{
 }, {
     createdBy?: string | undefined;
     updatedBy?: string | undefined;
-    headcount?: number | undefined;
     notes?: string | undefined;
     department?: string | undefined;
     role?: string | undefined;
+    headcount?: number | undefined;
     members?: {
         createdAt: string;
         updatedAt: string;
