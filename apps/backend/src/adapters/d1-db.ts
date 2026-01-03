@@ -280,4 +280,6 @@ export async function getHistory(
 // Type definitions for Cloudflare Workers bindings
 export interface Env {
   DB: D1Database;
+  FRONTEND_URL?: string;
+  ENVIRONMENT?: string;
 }

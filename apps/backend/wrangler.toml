@@ -14,7 +14,9 @@ migrations_dir = "migrations"
 
 # Production environment
 [env.production]
-vars = { ENVIRONMENT = "production" }
+[env.production.vars]
+ENVIRONMENT = "production"
+FRONTEND_URL = "https://recruit-architect-frontend.pages.dev"
 
 [[env.production.d1_databases]]
 binding = "DB"

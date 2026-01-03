@@ -1,17 +1,17 @@
-import type { D1Database } from '@cloudflare/workers-types';
-import { createD1Service, type Env } from '../adapters/d1-db';
+import type { D1Database } from "@cloudflare/workers-types";
+import { createD1Service, type Env } from "../adapters/d1-db";
 
 export type EntityType =
-  | 'kpi'
-  | 'initiative'
-  | 'companyAnalysis'
-  | 'jobPosting'
-  | 'jobRole'
-  | 'competitorJob'
-  | 'organization'
-  | 'selectionProcess'
-  | 'recruitmentChannel'
-  | 'faq';
+  | "kpi"
+  | "initiative"
+  | "companyAnalysis"
+  | "jobPosting"
+  | "jobRole"
+  | "competitorJob"
+  | "organization"
+  | "selectionProcess"
+  | "recruitmentChannel"
+  | "faq";
 
 export interface BaseEntity {
   id: string;
@@ -42,7 +42,7 @@ export abstract class BaseService<T extends BaseEntity> {
     return await repository.getById(id);
   }
 
-  async create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Promise<T> {
+  async create(data: Omit<T, "id" | "createdAt" | "updatedAt">): Promise<T> {
     const repository = this.getRepository();
     return await repository.create(data);
   }
@@ -57,4 +57,3 @@ export abstract class BaseService<T extends BaseEntity> {
     return await repository.delete(id);
   }
 }
-

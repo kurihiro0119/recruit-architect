@@ -31,9 +31,34 @@ app.use("*", logger());
 app.use(
   "*",
   cors({
-    origin: "*",
+    origin: (origin, c) => {
+      const env = c.env as Env;
+      const frontendUrl = env.FRONTEND_URL;
+      const environment = env.ENVIRONMENT || "development";
+
+      // 開発環境ではすべてのオリジンを許可
+      if (environment === "development") {
+        return "*";
+      }
+
+      // 本番環境では指定されたオリジンのみ許可
+      if (frontendUrl) {
+        // 複数のオリジンを許可する場合（カンマ区切り）
+        const allowedOrigins = frontendUrl.split(",").map((url) => url.trim());
+        if (origin && allowedOrigins.includes(origin)) {
+          return origin;
+        }
+        // リクエストにOriginヘッダーがない場合（サーバー間通信など）は最初のオリジンを返す
+        return allowedOrigins[0];
+      }
+
+      // 本番環境でFRONTEND_URLが設定されていない場合はすべて許可（フォールバック）
+      return "*";
+    },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    exposeHeaders: ["Content-Type"],
   })
 );
 

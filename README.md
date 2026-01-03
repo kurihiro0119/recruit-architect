@@ -220,8 +220,10 @@ migrations_dir = "migrations"
 3. マイグレーションを実行（本番環境）:
 
 ```bash
-npx wrangler d1 migrations apply recruit-architect-db --env production
+npx wrangler d1 migrations apply recruit-architect-db --env production --remote
 ```
+
+**注意**: 本番環境（Workers）のデータベースに接続するには `--remote` フラグが必要です。`--env production` だけではローカルデータベースに接続されます。
 
 4. バックエンドをデプロイ:
 
@@ -277,8 +279,9 @@ npx wrangler pages deploy dist --project-name=recruit-architect-frontend
 
 管理者は CLI コマンドでのみ登録可能です:
 
+#### ローカル環境
+
 ```bash
-# 管理者を作成するSQLを生成
 cd apps/backend
 pnpm run create-admin <email> <password> <name>
 
@@ -286,15 +289,19 @@ pnpm run create-admin <email> <password> <name>
 pnpm run create-admin admin@example.com password123 "Admin User"
 ```
 
-生成された SQL を実行:
+#### 本番環境（Cloudflare Workers）
 
 ```bash
-# ローカル環境
-wrangler d1 execute recruit-architect-db --local --command "INSERT INTO admins ..."
+cd apps/backend
+pnpm run create-admin <email> <password> <name> --production
 
-# 本番環境
-wrangler d1 execute recruit-architect-db --command "INSERT INTO admins ..."
+# 例
+pnpm run create-admin admin@example.com password123 "Admin User" --production
 ```
+
+**注意**: `--production` フラグを指定すると、自動的に `--remote` フラグが追加され、本番環境のリモートデータベースに接続されます。
+
+**注意**: 本番環境で実行する前に、`wrangler.toml` の `[env.production]` セクションに正しい `database_id` が設定されていることを確認してください。
 
 ## 注意事項
 
