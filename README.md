@@ -9,23 +9,11 @@ recruit-architect/
 ├── apps/
 │   ├── backend/                 # Hono APIサーバー
 │   │   ├── src/
-│   │   │   ├── index.ts         # エントリーポイント
-│   │   │   ├── routes/          # APIルート定義
-│   │   │   │   ├── kpi.ts
-│   │   │   │   ├── initiative.ts
-│   │   │   │   ├── company-analysis.ts
-│   │   │   │   ├── job-posting.ts
-│   │   │   │   ├── job-role.ts
-│   │   │   │   ├── competitor-job.ts
-│   │   │   │   ├── organization.ts
-│   │   │   │   ├── selection-process.ts
-│   │   │   │   ├── recruitment-channel.ts
-│   │   │   │   ├── faq.ts
-│   │   │   │   └── history.ts
-│   │   │   ├── services/        # ビジネスロジック
-│   │   │   │   └── base-service.ts
+│   │   │   ├── index.ts         # エントリーポイント（CRUDルート定義）
 │   │   │   └── adapters/        # データアクセス層
-│   │   │       └── in-memory-db.ts
+│   │   │       └── d1-db.ts     # Cloudflare D1アダプター
+│   │   ├── migrations/          # D1マイグレーション
+│   │   │   └── 0001_initial.sql # 初期スキーマ
 │   │   ├── package.json
 │   │   ├── tsconfig.json
 │   │   └── wrangler.toml        # Cloudflare Workers設定
@@ -98,7 +86,7 @@ recruit-architect/
 ### バックエンド
 - **Hono**: 軽量で高速なWebフレームワーク（Cloudflare Workers対応）
 - **TypeScript**: 型安全な開発
-- **インメモリDB**: プロトタイプ用のMap-basedストレージ
+- **Cloudflare D1**: SQLite互換のサーバーレスデータベース
 
 ### フロントエンド
 - **React 18**: UIライブラリ
@@ -188,9 +176,45 @@ pnpm run build
 履歴APIは以下のクエリパラメータをサポート:
 - `GET /api/history?entityId={id}&entityType={type}` - フィルタリング
 
+## データベース設定（Cloudflare D1）
+
+### ローカル開発
+
+ローカル開発では、wranglerがD1をエミュレートします。特別な設定は不要です。
+
+```bash
+# 開発サーバー起動時に自動的にローカルD1が使用されます
+pnpm run dev --filter=@recruit-architect/backend
+```
+
+### 本番環境へのデプロイ
+
+1. D1データベースを作成:
+```bash
+cd apps/backend
+npx wrangler d1 create recruit-architect-db
+```
+
+2. 出力されたdatabase_idを`wrangler.toml`に設定:
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "recruit-architect-db"
+database_id = "your-database-id-here"
+```
+
+3. マイグレーションを実行:
+```bash
+npx wrangler d1 migrations apply recruit-architect-db
+```
+
+4. デプロイ:
+```bash
+npx wrangler deploy
+```
+
 ## 注意事項
 
-- **インメモリDB**: 本アプリケーションはプロトタイプとしてインメモリDBを使用しています。サーバーを再起動するとデータは失われます。
 - **認証なし**: 現在、認証機能は実装されていません。本番環境では適切な認証を追加してください。
 - **CORS設定**: 開発用にすべてのオリジンを許可しています。本番環境では適切に制限してください。
 
