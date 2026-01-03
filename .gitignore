@@ -1,7 +1,7 @@
 .env
 .idea
 /.vscode
-/node_modules
+node_modules
 /dist
 /build
 /logs
@@ -12,3 +12,5 @@
 /test
 /test-results
 /test-output
+.turbo
+*.log
