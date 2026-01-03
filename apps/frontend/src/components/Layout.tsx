@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   BarChart3,
   Target,
@@ -12,8 +12,10 @@ import {
   Home,
   Menu,
   X,
+  LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useUserAuth } from '../contexts/UserAuthContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -36,6 +38,13 @@ const navItems = [
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, logout } = useUserAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,6 +63,12 @@ export function Layout({ children }: LayoutProps) {
         <div className="p-6 border-b">
           <h1 className="text-xl font-bold text-gray-800">Recruit Architect</h1>
           <p className="text-sm text-gray-500">採用管理システム</p>
+          {user && (
+            <div className="mt-4 pt-4 border-t">
+              <p className="text-xs text-gray-600">{user.name}</p>
+              <p className="text-xs text-gray-500">{user.email}</p>
+            </div>
+          )}
         </div>
         <nav className="p-4 overflow-y-auto h-[calc(100vh-100px)]">
           <ul className="space-y-1">
@@ -78,6 +93,17 @@ export function Layout({ children }: LayoutProps) {
               );
             })}
           </ul>
+          {user && (
+            <div className="mt-4 pt-4 border-t">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors text-gray-600 hover:bg-gray-100 w-full"
+              >
+                <LogOut size={20} />
+                <span>ログアウト</span>
+              </button>
+            </div>
+          )}
         </nav>
       </aside>
 

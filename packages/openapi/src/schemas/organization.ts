@@ -40,9 +40,9 @@ export const OrganizationMemberSchema = z.object({
 // 組織スキーマ（正規化後 - リレーションは別テーブルで管理）
 export const OrganizationSchema = z.object({
   id: IdSchema,
-  notes: z.string().nullish(),
-  comments: z.array(CommentSchema).nullish(),
-}).merge(TimestampSchema).merge(AuditSchema);
+  name: z.string(),
+  status: z.enum(['active', 'inactive']).default('active'),
+}).merge(TimestampSchema);
 
 // 作成用スキーマ
 export const CreateDepartmentSchema = DepartmentSchema.omit({

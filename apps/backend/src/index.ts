@@ -19,6 +19,10 @@ import { registerRecruitmentChannelRoutes } from "./routes/recruitment-channel.r
 import { registerFaqRoutes } from "./routes/faq.routes";
 import { registerFaqCategoryRoutes } from "./routes/faq-category.routes";
 import { registerHistoryRoutes } from "./routes/history.routes";
+import { registerAdminRoutes } from "./routes/admin.routes";
+import { registerUserRoutes } from "./routes/user.routes";
+import { registerAdminAuthRoutes } from "./routes/admin-auth.routes";
+import { registerUserAuthRoutes } from "./routes/user-auth.routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -57,6 +61,12 @@ app.get("/", (c) => {
       "/api/faqs",
       "/api/faq-categories",
       "/api/history",
+      "/api/admins",
+      "/api/users",
+      "/api/admin/login",
+      "/api/admin/verify",
+      "/api/user/login",
+      "/api/user/verify",
     ],
   });
 });
@@ -79,5 +89,9 @@ registerRecruitmentChannelRoutes(app);
 registerFaqRoutes(app);
 registerFaqCategoryRoutes(app);
 registerHistoryRoutes(app);
+registerAdminRoutes(app);
+registerUserRoutes(app);
+registerAdminAuthRoutes(app);
+registerUserAuthRoutes(app);
 
 export default app;

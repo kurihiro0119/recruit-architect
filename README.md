@@ -162,6 +162,7 @@ pnpm run build
 | 採用チャネル管理 | 採用チャネルの特性・効果を管理 | `/api/recruitment-channels` |
 | FAQ管理 | よくある質問と回答を管理 | `/api/faqs` |
 | 履歴管理 | 全エンティティの変更履歴を参照 | `/api/history` |
+| 管理者機能 | 組織・ユーザー管理 | `/api/admins`, `/api/users` |
 
 ## API仕様
 
@@ -213,10 +214,43 @@ npx wrangler d1 migrations apply recruit-architect-db
 npx wrangler deploy
 ```
 
+## 管理者機能
+
+### 管理者ページ
+
+管理者ページ (`/admin`) では以下の操作が可能です:
+
+- **組織管理**: 組織の作成・編集・削除・停止
+- **ユーザー管理**: 組織に紐づくユーザーの作成・編集・削除・パスワード設定
+
+### 管理者の登録
+
+管理者はCLIコマンドでのみ登録可能です:
+
+```bash
+# 管理者を作成するSQLを生成
+cd apps/backend
+pnpm run create-admin <email> <password> <name>
+
+# 例
+pnpm run create-admin admin@example.com password123 "Admin User"
+```
+
+生成されたSQLを実行:
+
+```bash
+# ローカル環境
+wrangler d1 execute recruit-architect-db --local --command "INSERT INTO admins ..."
+
+# 本番環境
+wrangler d1 execute recruit-architect-db --command "INSERT INTO admins ..."
+```
+
 ## 注意事項
 
 - **認証なし**: 現在、認証機能は実装されていません。本番環境では適切な認証を追加してください。
 - **CORS設定**: 開発用にすべてのオリジンを許可しています。本番環境では適切に制限してください。
+- **パスワードハッシュ**: パスワードはSHA-256 + saltでハッシュ化されています。本番環境ではより安全な方法（bcrypt、argon2）の使用を推奨します。
 
 ## ライセンス
 

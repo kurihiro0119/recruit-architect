@@ -1,12 +1,26 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787';
 
+// Global token storage for user authentication
+let userAuthToken: string | null = null;
+
+export function setUserAuthToken(token: string | null) {
+  userAuthToken = token;
+}
+
 async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options?.headers as Record<string, string>),
+  };
+
+  // Add auth token if available and not already set
+  if (userAuthToken && !headers['Authorization']) {
+    headers['Authorization'] = `Bearer ${userAuthToken}`;
+  }
+
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -86,7 +100,7 @@ export const competitorJobApi = {
 export const organizationApi = {
   getAll: () => api.get('/api/organizations'),
   getById: (id: string) => api.get(`/api/organizations/${id}`),
-  // create: (data: unknown) => api.post('/api/organizations', data), // 将来的にSaaS対応で必要
+  create: (data: unknown) => api.post('/api/organizations', data),
   update: (id: string, data: unknown) => api.put(`/api/organizations/${id}`, data),
   delete: (id: string) => api.delete(`/api/organizations/${id}`),
 };
@@ -164,3 +178,133 @@ export const historyApi = {
     return api.get(`/api/history${query ? `?${query}` : ''}`);
   },
 };
+
+export const adminApi = {
+  getAll: () => api.get('/api/admins'),
+  getById: (id: string) => api.get(`/api/admins/${id}`),
+  create: (data: unknown) => api.post('/api/admins', data),
+  update: (id: string, data: unknown) => api.put(`/api/admins/${id}`, data),
+  delete: (id: string) => api.delete(`/api/admins/${id}`),
+};
+
+export const userApi = {
+  getAll: (organizationId?: string) => {
+    const query = organizationId ? `?organizationId=${organizationId}` : '';
+    return api.get(`/api/users${query}`);
+  },
+  getById: (id: string) => api.get(`/api/users/${id}`),
+  create: (data: unknown) => api.post('/api/users', data),
+  update: (id: string, data: unknown) => api.put(`/api/users/${id}`, data),
+  delete: (id: string) => api.delete(`/api/users/${id}`),
+};
+
+// Admin auth API
+export const adminAuthApi = {
+  login: (email: string, password: string) => {
+    console.log('adminAuthApi.login called with:', { email, password });
+    const payload = { email, password };
+    console.log('Sending payload:', payload);
+    return api.post('/api/admin/login', payload);
+  },
+  verify: (token: string) =>
+    fetchApi('/api/admin/verify', {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+};
+
+// Admin API with auth
+const adminApiWithAuth = (token: string) => ({
+  get: <T>(endpoint: string) =>
+    fetchApi<T>(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  post: <T>(endpoint: string, data: unknown) =>
+    fetchApi<T>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  put: <T>(endpoint: string, data: unknown) =>
+    fetchApi<T>(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  delete: <T>(endpoint: string) =>
+    fetchApi<T>(endpoint, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+});
+
+export const getAdminApi = (token: string) => ({
+  getAll: () => adminApiWithAuth(token).get('/api/admins'),
+  getById: (id: string) => adminApiWithAuth(token).get(`/api/admins/${id}`),
+  create: (data: unknown) => adminApiWithAuth(token).post('/api/admins', data),
+  update: (id: string, data: unknown) =>
+    adminApiWithAuth(token).put(`/api/admins/${id}`, data),
+  delete: (id: string) => adminApiWithAuth(token).delete(`/api/admins/${id}`),
+});
+
+export const getUserApi = (token: string) => ({
+  getAll: (organizationId?: string) => {
+    const query = organizationId ? `?organizationId=${organizationId}` : '';
+    return adminApiWithAuth(token).get(`/api/users${query}`);
+  },
+  getById: (id: string) => adminApiWithAuth(token).get(`/api/users/${id}`),
+  create: (data: unknown) => adminApiWithAuth(token).post('/api/users', data),
+  update: (id: string, data: unknown) =>
+    adminApiWithAuth(token).put(`/api/users/${id}`, data),
+  delete: (id: string) => adminApiWithAuth(token).delete(`/api/users/${id}`),
+});
+
+// User auth API
+export const userAuthApi = {
+  login: (email: string, password: string) =>
+    api.post('/api/user/login', { email, password }),
+  verify: (token: string) =>
+    fetchApi('/api/user/verify', {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+};
+
+// User API with auth
+const userApiWithAuth = (token: string) => ({
+  get: <T>(endpoint: string) =>
+    fetchApi<T>(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  post: <T>(endpoint: string, data: unknown) =>
+    fetchApi<T>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  put: <T>(endpoint: string, data: unknown) =>
+    fetchApi<T>(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  delete: <T>(endpoint: string) =>
+    fetchApi<T>(endpoint, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+});
+
+export const getAuthenticatedApi = (token: string) => ({
+  kpi: {
+    getAll: () => userApiWithAuth(token).get('/api/kpis'),
+    getById: (id: string) => userApiWithAuth(token).get(`/api/kpis/${id}`),
+    create: (data: unknown) => userApiWithAuth(token).post('/api/kpis', data),
+    update: (id: string, data: unknown) => userApiWithAuth(token).put(`/api/kpis/${id}`, data),
+    delete: (id: string) => userApiWithAuth(token).delete(`/api/kpis/${id}`),
+  },
+  organization: {
+    getAll: () => userApiWithAuth(token).get('/api/organizations'),
+    getById: (id: string) => userApiWithAuth(token).get(`/api/organizations/${id}`),
+    update: (id: string, data: unknown) => userApiWithAuth(token).put(`/api/organizations/${id}`, data),
+  },
+  // 他のAPIも同様に追加可能
+});

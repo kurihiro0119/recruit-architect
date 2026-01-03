@@ -88,7 +88,7 @@ const tableConfigs: Record<string, { tableName: string; jsonFields: string[] }> 
   jobPosting: { tableName: 'job_postings', jsonFields: ['revisions', 'comments'] },
   jobRole: { tableName: 'job_roles', jsonFields: ['comments'] },
   competitorJob: { tableName: 'competitor_jobs', jsonFields: ['comments'] },
-  organization: { tableName: 'organizations', jsonFields: ['comments'] },
+  organization: { tableName: 'organizations', jsonFields: [] },
   department: { tableName: 'departments', jsonFields: [] },
   team: { tableName: 'teams', jsonFields: [] },
   position: { tableName: 'positions', jsonFields: [] },
