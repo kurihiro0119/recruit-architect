@@ -15,4 +15,4 @@ node_modules
 .turbo
 *.log
 
-*/.wrangler/
+**/.wrangler/
