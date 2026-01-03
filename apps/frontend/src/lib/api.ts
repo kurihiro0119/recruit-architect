@@ -5,12 +5,14 @@ const getApiUrl = (): string => {
     const url = (window as any).__ENV__.VITE_API_URL;
     // プレースホルダーが残っている場合はビルド時の環境変数を使用
     if (url && url !== "%VITE_API_URL%") {
-      return url;
+      // 末尾のスラッシュを削除
+      return url.replace(/\/+$/, "");
     }
   }
   // 2. ビルド時の環境変数から取得（フォールバック）
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+    // 末尾のスラッシュを削除
+    return String(import.meta.env.VITE_API_URL).replace(/\/+$/, "");
   }
   // 3. デフォルト値
   return "http://localhost:8787";
@@ -42,7 +44,11 @@ async function fetchApi<T>(
     headers["Authorization"] = `Bearer ${userAuthToken}`;
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  // endpointの先頭にスラッシュがあることを保証
+  const normalizedEndpoint = endpoint.startsWith("/")
+    ? endpoint
+    : `/${endpoint}`;
+  const response = await fetch(`${API_URL}${normalizedEndpoint}`, {
     ...options,
     headers,
   });

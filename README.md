@@ -250,8 +250,11 @@ npx wrangler pages project create recruit-architect-frontend
 2. Git 連携を設定（Cloudflare Dashboard から）:
 
    - リポジトリを接続
-   - ビルドコマンド: `cd apps/frontend && pnpm install && pnpm run build`
-   - ビルド出力ディレクトリ: `apps/frontend/dist`
+   - **フレームワークプリセット**: None
+   - **ビルドコマンド**: `cd apps/frontend && pnpm install && pnpm run build`
+   - **ビルド出力ディレクトリ**: `apps/frontend/dist`
+   - **ルートディレクトリ**: （空欄のまま、または `/`）
+   - **Node.js バージョン**: 22（または利用可能な最新版）
 
 3. 環境変数を設定（Cloudflare Dashboard から）:
    - `VITE_API_URL`: バックエンド API の URL（例: `https://recruit-architect-api.your-subdomain.workers.dev`）
