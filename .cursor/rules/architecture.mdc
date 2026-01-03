@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+実装する際、ディレクトリ構造が適切か以下のファイルを参照してください
+
+docs/architecture/architecture.md
