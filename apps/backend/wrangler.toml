@@ -16,10 +16,10 @@ migrations_dir = "migrations"
 [env.production]
 [env.production.vars]
 ENVIRONMENT = "production"
-FRONTEND_URL = "https://recruit-architect.pages.dev/"
+FRONTEND_URL = ""
 
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "recruit-architect-db"
-database_id = "5d9c97bb-abc5-4be1-935a-149bae02d18b"
+database_id = ""
 migrations_dir = "migrations"
